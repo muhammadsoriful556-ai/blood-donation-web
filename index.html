@@ -4,15 +4,221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Make Friends with Blood Donation</title>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #fff5f5; }
-        h1 { color: #e53e3e; }
-        p { color: #4a5568; }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-    <h1>Make Friends with Blood Donation</h1>
-    <p>বাংলাদেশ ও পশ্চিমবঙ্গ রক্তদান নেটওয়ার্ক শীঘ্রই চালু হচ্ছে...</p>
-</body>
-</html>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
+    <!-- Header -->
+    <header class="bg-red-600 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-lg font-bold tracking-wide flex items-center gap-2">
+                <i class="fa-solid font-bold fa-droplet text-white text-xl"></i>
+                <span>Blood Donation BD & WB</span>
+            </h1>
+            <button onclick="toggleModal('register-modal')" class="bg-white text-red-600 font-semibold text-xs md:text-sm px-4 py-2 rounded-full shadow hover:bg-red-50 transition">
+                + ডোনার হন
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-grow">
+
+        <!-- Search Bar -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mb-8">
+            <h2 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass text-red-600"></i> রক্তদাতা খুঁজুন
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <!-- Country -->
+                <select id="search-country" onchange="updateDivisions('search')" class="p-2.5 border rounded-xl text-sm bg-gray-50 outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">দেশ/অঞ্চল নির্বাচন করুন</option>
+                    <option value="Bangladesh">বাংলাদেশ</option>
+                    <option value="West Bengal">পশ্চিমবঙ্গ (ভারত)</option>
+                </select>
+
+                <!-- Division -->
+                <select id="search-division" onchange="updateDistricts('search')" class="p-2.5 border rounded-xl text-sm bg-gray-50 outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">বিভাগ</option>
+                </select>
+
+                <!-- District -->
+                <select id="search-district" class="p-2.5 border rounded-xl text-sm bg-gray-50 outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">জেলা</option>
+                </select>
+
+                <!-- Blood Group -->
+                <select id="search-group" class="p-2.5 border rounded-xl text-sm bg-gray-50 outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">রক্তের গ্রুপ</option>
+                    <option value="A+">A+</option><option value="A-">A-</option>
+                    <option value="B+">B+</option><option value="B-">B-</option>
+                    <option value="O+">O+</option><option value="O-">O-</option>
+                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                </select>
+            </div>
+
+            <button onclick="searchDonors()" class="mt-4 w-full bg-red-600 text-white font-semibold py-2.5 rounded-xl hover:bg-red-700 transition shadow-sm">
+                সন্ধান করুন
+            </button>
+        </section>
+
+        <!-- Donors List Grid -->
+        <section>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-base font-bold text-gray-800">রক্তদাতাদের তালিকা</h3>
+                <span class="text-xs text-gray-500 bg-gray-200 px-2.5 py-1 rounded-full">কড়া সিকিউরিটি ও ভেরিফাইড</span>
+            </div>
+            
+            <div id="donors-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="col-span-full text-center py-8 bg-white rounded-xl border border-dashed border-gray-300">
+                    <p class="text-gray-500 text-sm">উপরের ফিল্টার থেকে এলাকা বা রক্তের গ্রুপ নির্বাচন করে সার্চ দিন।</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal: Donor Registration -->
+    <div id="register-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <h2 class="text-lg font-bold text-gray-800 mb-1">রক্তদাতা রেজিস্ট্রেশন</h2>
+            <p class="text-xs text-gray-500 mb-4">আপনার সঠিক তথ্য দিয়ে সাধারণ মানুষের জীবন বাঁচাতে সাহায্য করুন।</p>
+
+            <form id="donor-form" onsubmit="submitForm(event)" class="space-y-3">
+                <input type="text" id="reg-name" placeholder="আপনার পূর্ণ নাম" required class="w-full p-2.5 border rounded-xl text-sm bg-gray-50">
+                <input type="tel" id="reg-phone" placeholder="মোবাইল নম্বর (১০/১১ ডিজিট)" required class="w-full p-2.5 border rounded-xl text-sm bg-gray-50">
+
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="reg-group" required class="p-2.5 border rounded-xl text-sm bg-gray-50">
+                        <option value="">রক্তের গ্রুপ</option>
+                        <option value="A+">A+</option><option value="A-">A-</option>
+                        <option value="B+">B+</option><option value="B-">B-</option>
+                        <option value="O+">O+</option><option value="O-">O-</option>
+                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                    </select>
+
+                    <select id="reg-country" onchange="updateDivisions('reg')" required class="p-2.5 border rounded-xl text-sm bg-gray-50">
+                        <option value="">দেশ/অঞ্চল</option>
+                        <option value="Bangladesh">বাংলাদেশ</option>
+                        <option value="West Bengal">পশ্চিমবঙ্গ</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="reg-division" onchange="updateDistricts('reg')" required class="p-2.5 border rounded-xl text-sm bg-gray-50">
+                        <option value="">বিভাগ</option>
+                    </select>
+                    <select id="reg-district" required class="p-2.5 border rounded-xl text-sm bg-gray-50">
+                        <option value="">জেলা</option>
+                    </select>
+                </div>
+
+                <input type="text" id="reg-upazila" placeholder="উপজেলা / থানা / মহকুমা" required class="w-full p-2.5 border rounded-xl text-sm bg-gray-50">
+
+                <div>
+                    <label class="text-xs text-gray-600 block mb-1 font-medium">শেষ কবে রক্ত দিয়েছেন?</label>
+                    <input type="date" id="reg-last-date" class="w-full p-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+
+                <div class="flex items-center gap-2 pt-2">
+                    <input type="checkbox" id="reg-hide-phone" class="rounded text-red-600 focus:ring-red-500 w-4 h-4">
+                    <label for="reg-hide-phone" class="text-xs text-gray-600">ফোন নম্বর সাধারণ ভিজিটরদের কাছে হাইড রাখুন</label>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-4 border-t">
+                    <button type="button" onclick="toggleModal('register-modal')" class="px-4 py-2 border rounded-xl text-xs text-gray-600">বাতিল</button>
+                    <button type="submit" class="px-5 py-2 bg-red-600 text-white rounded-xl text-xs font-bold hover:bg-red-700">জমা দিন</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Area -->
+    <script>
+        // Location Data Structure for BD & WB
+        const locationData = {
+            "Bangladesh": {
+                "ঢাকা": ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", "টাঙ্গাইল", "নরসিংদী", "ফরিদপুর", "মানিকগঞ্জ", "মুন্সিগঞ্জ", "রাজবাড়ী", "মাদারীপুর", "গোপালগঞ্জ", "শরীয়তপুর"],
+                "চট্টগ্রাম": ["চট্টগ্রাম", "কক্সবাজার", "কুমিল্লা", "ব্রাহ্মণবাড়িয়া", "ফেনী", "নোয়াখালী", "লক্ষ্মীপুর", "চাঁদপুর", "রাঙ্গামাটি", "বান্দরবান", "খাগড়াছড়ি"],
+                "রাজশাহী": ["রাজশাহী", "বগুড়া", "পাবনা", "সিরাজগঞ্জ", "নওগাঁ", "নাটোর", "জয়পুরহাট", "চাঁপাইনবাবগঞ্জ"],
+                "খুলনা": ["খুলনা", "যশোর", "কুষ্টিয়া", "সাতক্ষীরা", "ঝিনাইদহ", "বাগেরহাট", "চুয়াডাঙ্গা", "মেহেরপুর", "নড়াইল", "মাগুরা"],
+                "বরিশাল": ["বরিশাল", "পটুয়াখালী", "ভোলা", "পিরোজপুর", "বরগুনা", "ঝালকাঠি"],
+                "সিলেট": ["সিলেট", "মৌলভীবাজার", "হবিগঞ্জ", "সুনামগঞ্জ"],
+                "রংপুর": ["রংপুর", "দিনাজপুর", "গাইবান্ধা", "কুড়িগ্রাম", "নীলফামারী", "লালমনিরহাট", "ঠাকুরগাঁও", "পঞ্চগড়"],
+                "ময়মনসিংহ": ["ময়মনসিংহ", "জামালপুর", "নেত্রকোনা", "শেরপুর"]
+            },
+            "West Bengal": {
+                "প্রেসিডেন্সি": ["কলকাতা", "উত্তর ২৪ পরগনা", "দক্ষিণ ২৪ পরগনা", " হাওড়া", "হুগলী", "নদীয়া"],
+                "মেদিনীপুর": ["পূর্ব মেদিনীপুর", "পশ্চিম মেদিনীপুর", "ঝাড়গ্রাম", "পুরুলিয়া", "বাঁকুড়া"],
+                "বোরধমান": ["পূর্ব বর্ধমান", "পশ্চিম বর্ধমান", "বীরভূম", "হুগলী"],
+                "মালদহ": ["মালদহ", "উত্তর দিনাজপুর", "দক্ষিণ দিনাজপুর", "মুর্শিদাবাদ"],
+                "জলপাইগুড়ি": ["জলপাইগুড়ি", "দার্জিলিং", "কালিম্পং", "কোচবিহার", "আলিপুরদুয়ার"]
+            }
+        };
+
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        // Dynamic Division loader
+        function updateDivisions(type) {
+            const country = document.getElementById(`${type}-country`).value;
+            const divisionSelect = document.getElementById(`${type}-division`);
+            const districtSelect = document.getElementById(`${type}-district`);
+
+            divisionSelect.innerHTML = '<option value="">বিভাগ</option>';
+            districtSelect.innerHTML = '<option value="">জেলা</option>';
+
+            if (country && locationData[country]) {
+                Object.keys(locationData[country]).forEach(div => {
+                    divisionSelect.innerHTML += `<option value="${div}">${div}</option>`;
+                });
+            }
+        }
+
+        // Dynamic District loader
+        function updateDistricts(type) {
+            const country = document.getElementById(`${type}-country`).value;
+            const division = document.getElementById(`${type}-division`).value;
+            const districtSelect = document.getElementById(`${type}-district`);
+
+            districtSelect.innerHTML = '<option value="">জেলা</option>';
+
+            if (country && division && locationData[country][division]) {
+                locationData[country][division].forEach(dis => {
+                    districtSelect.innerHTML += `<option value="${dis}">${dis}</option>`;
+                });
+            }
+        }
+
+        function submitForm(e) {
+            e.preventDefault();
+            alert("ধন্যবাদ! রেজিস্ট্রেশন সফল হয়েছে। এডমিন দ্বারা ভেরিফিকেশনের পরই আপনার প্রোফাইলে ভেরিফাইড ব্যাজ যুক্ত হবে।");
+            toggleModal('register-modal');
+        }
+
+        function searchDonors() {
+            const container = document.getElementById('donors-container');
+            container.innerHTML = `
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">সরিফুল ইসলাম <i class="fa-solid fa-circle-check text-blue-500 text-xs" title="Verified Donor"></i></h4>
+                            <p class="text-xs text-gray-500"><i class="fa-solid fa-location-dot text-red-500"></i> রংপুর, পঞ্চগড়, দেবীগঞ্জ</p>
+                        </div>
+                        <span class="bg-red-100 text-red-600 font-bold text-xs px-2.5 py-1 rounded-full">O+</span>
+                    </div>
+                    <div class="mt-3 pt-3 border-t flex justify-between items-center text-xs">
+                        <span class="text-green-600 font-medium">রক্তদানে প্রস্তুত</span>
+                        <a href="tel:01700000000" class="bg-green-600 text-white px-3 py-1.5 rounded-lg font-semibold"><i class="fa-solid fa-phone"></i> কল করুন</a>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+    </html>
+    
