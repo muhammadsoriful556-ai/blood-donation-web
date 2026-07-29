@@ -7,33 +7,276 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* লাল ও সবুজ রঙের ডায়নামিক এনিমেশন */
+        @keyframes bgDynamicColor {
+            0% { background-color: #dc2626; }
+            50% { background-color: #16a34a; }
+            100% { background-color: #dc2626; }
+        }
+        .dynamic-header {
+            animation: bgDynamicColor 8s infinite ease-in-out;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-100 text-gray-800 font-sans pb-20 min-h-screen flex flex-col">
 
-    <!-- Header -->
-    <header class="bg-red-600 text-white shadow-lg sticky top-0 z-40">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-lg font-bold tracking-wide flex items-center gap-2">
-                <i class="fa-solid font-bold fa-droplet text-white text-xl"></i>
-                <span>Blood Donation BD & WB</span>
-            </h1>
-            <button onclick="toggleModal('register-modal')" class="bg-white text-red-600 font-semibold text-xs md:text-sm px-4 py-2 rounded-full shadow hover:bg-red-50 transition">
-                + ডোনার হন
-            </button>
+    <!-- ১. বিসমিল্লাহির রাহমানির রাহীম (স্থায়ী) -->
+    <div class="bg-black text-amber-400 text-center text-xs py-1 font-bold tracking-widest shadow">
+        بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+    </div>
+
+    <!-- ২. ডায়নামিক কালার হেডার ও স্ক্রলিং মেসেজ -->
+    <header class="dynamic-header text-white shadow-md transition-colors duration-1000">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <marquee behavior="scroll" direction="left" class="text-sm font-bold tracking-wide">
+                🩸 মেক ফ্রেন্ডস উইথ ব্লাড ডোনেশন নেটওয়ার্ক — বাংলাদেশ ও পশ্চিমবঙ্গ অঞ্চলের রক্তদান প্ল্যাটফর্ম 🩸
+            </marquee>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-grow">
+    <!-- ৩. মূল কনটেন্ট -->
+    <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow">
 
-        <!-- Search Bar -->
-        <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mb-8">
-            <h2 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-magnifying-glass text-red-600"></i> রক্তদাতা খুঁজুন
-            </h2>
+        <!-- টাইপ নির্বাচন (রক্ত নাকি প্লেটলেট) -->
+        <div class="bg-white p-3 rounded-2xl shadow-sm mb-6 flex justify-center gap-6 border">
+            <label class="flex items-center gap-2 cursor-pointer font-bold text-sm text-red-600">
+                <input type="radio" name="donation_type" value="blood" checked class="accent-red-600"> 🩸 সম্পূর্ণ রক্ত
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer font-bold text-sm text-amber-600">
+                <input type="radio" name="donation_type" value="platelet" class="accent-amber-600"> ⚡ প্লেটলেট (Platelet)
+            </label>
+        </div>
+
+        <!-- ৪. সার্চ সেকশন -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- বাংলাদেশ -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-red-600">
+                <h3 class="font-bold text-gray-800 text-base mb-3">🇧🇩 বাংলাদেশ অঞ্চল ফিল্টার</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <select class="p-2 border rounded-xl text-xs bg-gray-50"><option value="">বিভাগ</option></select>
+                    <select class="p-2 border rounded-xl text-xs bg-gray-50"><option value="">জেলা</option></select>
+                    <select class="p-2 border rounded-xl text-xs bg-gray-50">
+                        <option value="">রক্তের গ্রুপ</option>
+                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                    </select>
+                </div>
+                <button class="w-full bg-red-600 text-white font-bold text-xs py-2 rounded-xl mt-3">রক্তদাতা খুঁজুন</button>
+            </div>
+
+            <!-- পশ্চিমবঙ্গ -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-green-600">
+                <h3 class="font-bold text-gray-800 text-base mb-3">🇮🇳 পশ্চিমবঙ্গ অঞ্চল ফিল্টার</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <select class="p-2 border rounded-xl text-xs bg-gray-50"><option value="">ডিভিশন</option></select>
+                    <select class="p-2 border rounded-xl text-xs bg-gray-50"><option value="">জেলা</option></select>
+                    <select class="p-2 border rounded-xl text-xs bg-gray-50">
+                        <option value="">রক্তের গ্রুপ</option>
+                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                    </select>
+                </div>
+                <button class="w-full bg-green-600 text-white font-bold text-xs py-2 rounded-xl mt-3">রক্তদাতা খুঁজুন</button>
+            </div>
+        </div>
+
+        <!-- মতামত সেকশন -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm mb-8 border">
+            <h3 class="font-bold text-gray-800 text-base mb-3"><i class="fa-solid fa-comments text-green-600"></i> আপনার মতামত প্রকাশ করুন</h3>
+            <form onsubmit="postFeedback(event)">
+                <textarea id="feedback-text" placeholder="আপনার অনুভূতি বা বার্তা লিখুন..." required class="w-full p-3 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-2 focus:ring-green-500 mb-2" rows="2"></textarea>
+                <button type="submit" class="bg-green-600 text-white font-bold text-xs px-5 py-2 rounded-xl hover:bg-green-700">পোস্ট করুন</button>
+            </form>
+
+            <div id="feedback-list" class="mt-4 space-y-2 border-t pt-3"></div>
+        </section>
+
+    </main>
+
+    <!-- ৫. ফিক্সড বটম নেভিগেশন বার -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
+        <div class="max-w-md mx-auto flex justify-between items-center px-4 py-2">
+            <button onclick="location.reload()" class="flex flex-col items-center text-red-600">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-bold">হোম</span>
+            </button>
+            <button onclick="toggleModal('reg-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
+                <i class="fa-solid fa-user-plus text-lg"></i>
+                <span class="text-[10px] font-bold">রেজিস্ট্রেশন</span>
+            </button>
+            <button onclick="toggleModal('login-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
+                <i class="fa-solid fa-right-to-bracket text-lg"></i>
+                <span class="text-[10px] font-bold">লগইন</span>
+            </button>
+            <button onclick="toggleModal('report-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
+                <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                <span class="text-[10px] font-bold">অভিযোগ</span>
+            </button>
+            <button onclick="toggleModal('contact-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
+                <i class="fa-solid fa-headset text-lg"></i>
+                <span class="text-[10px] font-bold">যোগাযোগ</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ৬. পাসওয়ার্ড সহ রেজিস্ট্রেশন মডাল -->
+    <div id="reg-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 my-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleModal('reg-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-id-card text-red-600"></i> ডোনার রেজিস্ট্রেশন
+            </h3>
             
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-                <!-- Country -->
+            <form onsubmit="handleRegistration(event)" class="space-y-3">
+                
+                <!-- নাম ও ডাকনাম -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-600 block mb-1">পূর্ণ নাম:</label>
+                        <input type="text" placeholder="যেমন: সরিফুল ইসলাম" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-600 block mb-1">ডাকনাম:</label>
+                        <input type="text" placeholder="যেমন: সরিফ" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                    </div>
+                </div>
+
+                <!-- বয়স ও রক্তের গ্রুপ -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-600 block mb-1">বয়স (বছর):</label>
+                        <input type="number" min="18" max="65" placeholder="যেমন: ২৫" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-600 block mb-1">রক্তের গ্রুপ:</label>
+                        <select required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                            <option value="">নির্বাচন করুন</option>
+                            <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- সর্বশেষ রক্তদানের তারিখ -->
+                <div>
+                    <label class="text-[11px] font-bold text-gray-600 block mb-1">সর্বশেষ রক্তদানের তারিখ:</label>
+                    <input type="date" class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                    <span class="text-[10px] text-gray-400 block mt-0.5">* নতুন ডোনার হলে খালি রাখুন।</span>
+                </div>
+
+                <!-- মোবাইল নম্বর -->
+                <div>
+                    <label class="text-[11px] font-bold text-gray-600 block mb-1">মোবাইল নম্বর (লগইন করার জন্য):</label>
+                    <input type="tel" placeholder="০১৭XXXXXXXX" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                </div>
+
+                <!-- নতুন পাসওয়ার্ড সেট করুন -->
+                <div>
+                    <label class="text-[11px] font-bold text-gray-600 block mb-1">গোপন পাসওয়ার্ড তৈরি করুন:</label>
+                    <input type="password" placeholder="কমপক্ষে ৬ ডিজিটের পাসওয়ার্ড দিন" minlength="6" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                </div>
+
+                <!-- নারীদের জন্য নম্বর প্রাইভেসি সুবিধা -->
+                <div class="bg-red-50 p-2.5 rounded-xl border border-red-100 flex items-start gap-2">
+                    <input type="checkbox" id="hide-phone" class="mt-0.5 accent-red-600 w-4 h-4 cursor-pointer">
+                    <label for="hide-phone" class="text-[11px] text-gray-700 leading-tight cursor-pointer">
+                        <span class="font-bold text-red-600">মেয়েদের প্রাইভেসির সুবিধা:</span> ভিজিটরদের কাছে মোবাইল নম্বর হাইড রাখতে টিক দিন।
+                    </label>
+                </div>
+
+                <!-- জিমেইল -->
+                <div>
+                    <label class="text-[11px] font-bold text-gray-600 block mb-1">Gmail (OTP ভেরিফিকেশনের জন্য):</label>
+                    <input type="email" placeholder="example@gmail.com" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                </div>
+
+                <!-- বর্তমান ঠিকানা -->
+                <div>
+                    <label class="text-[11px] font-bold text-gray-600 block mb-1">বর্তমান ঠিকানা (রোড/গ্রাম/বাসা নং):</label>
+                    <input type="text" placeholder="যেমন: বাসা-১২, রোড-০৫, মিরপুর-১০" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-red-500">
+                </div>
+
+                <!-- ফটো ও ফেস ভেরিফিকেশন -->
+                <div class="space-y-2 pt-1">
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-600">১. নিজের প্রোফাইল ফটো আপলোড করুন:</label>
+                        <input type="file" accept="image/*" required class="w-full text-xs mt-1">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-600">২. লাইভ ফেস সেলফি (ক্যামেরা দিয়ে তুলে দিন):</label>
+                        <input type="file" accept="image/*" capture="user" required class="w-full text-xs p-1.5 bg-red-50 rounded-xl mt-1 border border-red-200">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 text-white font-bold text-xs py-2.5 rounded-xl mt-4 shadow hover:bg-red-700">
+                    সম্পূর্ণ রেজিস্ট্রেশন করুন
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ৭. আপডেট করা নম্বর ও পাসওয়ার্ড দিয়ে লগইন মডাল -->
+    <div id="login-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+            <button onclick="toggleModal('login-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-right-to-bracket text-green-600"></i> ডোনার লগইন
+            </h3>
+            <form onsubmit="handleLogin(event)" class="space-y-3">
+                <div>
+                    <label class="text-[11px] font-bold text-gray-600 block mb-1">মোবাইল নম্বর:</label>
+                    <input type="tel" placeholder="০১৭XXXXXXXX" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-green-500">
+                </div>
+                <div>
+                    <label class="text-[11px] font-bold text-gray-600 block mb-1">পাসওয়ার্ড:</label>
+                    <input type="password" placeholder="আপনার পাসওয়ার্ড দিন" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-green-500">
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white font-bold text-xs py-2.5 rounded-xl shadow hover:bg-green-700 mt-2">
+                    লগইন করুন
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- অন্যান্য মডাল (অভিযোগ, নোটিশ) -->
+    <div id="notice-modal" class="fixed inset-0 bg-black/70 flex justify-center items-center p-4 z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl">
+            <div class="text-red-600 text-3xl mb-2"><i class="fa-solid fa-circle-exclamation"></i></div>
+            <h3 class="font-bold text-gray-800 text-base mb-2">জরুরি নির্দেশাবলী</h3>
+            <p class="text-xs text-gray-600 mb-6 leading-relaxed">রক্তদান মানবিক সেবা। কোনো প্রকার ভুল তথ্য বা আর্থিক লেনদেন সম্পূর্ণ নিষিদ্ধ।</p>
+            <button onclick="document.getElementById('notice-modal').classList.add('hidden')" class="w-full bg-red-600 text-white font-bold text-sm py-2.5 rounded-xl shadow">আমি সম্মত</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        function postFeedback(e) {
+            e.preventDefault();
+            const text = document.getElementById('feedback-text').value;
+            const list = document.getElementById('feedback-list');
+            const newFeedback = document.createElement('div');
+            newFeedback.className = "bg-gray-50 p-2.5 rounded-xl text-xs border border-gray-200";
+            newFeedback.innerHTML = `<p class="font-semibold text-gray-700">শুভাকাঙ্ক্ষী:</p><p class="text-gray-600">${text}</p>`;
+            list.prepend(newFeedback);
+            document.getElementById('feedback-text').value = '';
+        }
+
+        function handleRegistration(e) {
+            e.preventDefault();
+            alert("রেজিস্ট্রেশন জমা হয়েছে! আপনার দেওয়া ইমেইলে ওটিপি কোড পাঠানো হচ্ছে।");
+            toggleModal('reg-modal');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            alert("সফলভাবে লগইন হয়েছে!");
+            toggleModal('login-modal');
+        }
+    </script>
+</body>
+</html>
                 <select id="search-country" onchange="updateDivisions('search')" class="p-2.5 border rounded-xl text-sm bg-gray-50 outline-none focus:ring-2 focus:ring-red-500">
                     <option value="">দেশ/অঞ্চল নির্বাচন করুন</option>
                     <option value="Bangladesh">বাংলাদেশ</option>
