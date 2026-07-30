@@ -1,301 +1,888 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Make Friends With Blood Donation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Hind Siliguri', sans-serif; }
-    body { background-color: #f4f6f9; color: #333; }
-
-    /* ১. হেডার ও বিসমিল্লাহ */
-    .top-header {
-      background: linear-gradient(135deg, #8b0000, #b22222);
-      color: #fff;
-      text-align: center;
-      padding: 15px 10px;
-      overflow: hidden;
-    }
-
-    .bismillah { font-size: 26px; font-weight: bold; color: #ffd700; margin-bottom: 5px; }
-
-    .org-name-container { white-space: nowrap; overflow: hidden; }
-    .org-name {
-      display: inline-block;
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      animation: moveLeftToRight 15s linear infinite;
-    }
-
-    @keyframes moveLeftToRight {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    /* ২. নেভিগেশন বার (NAVBAR) */
-    .navbar {
-      background-color: #1a1a1a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .navbar a {
-      color: #fff;
-      text-decoration: none;
-      padding: 12px 20px;
-      font-size: 15px;
-      font-weight: 600;
-      transition: background 0.3s;
-    }
-
-    .navbar a:hover, .navbar a.active {
-      background-color: #b22222;
-    }
-
-    /* ৩. লাইভ নোটিশ বার */
-    .notice-ticker {
-      background-color: #333;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      padding: 8px 15px;
-    }
-
-    .notice-badge {
-      background-color: #e63946;
-      padding: 3px 10px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 13px;
-      margin-right: 15px;
-      white-space: nowrap;
-    }
-
-    .notice-text marquee { font-size: 14px; }
-
-    /* কন্টেইনার */
-    .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
-
-    /* ৪. বাংলাদেশ ও পশ্চিমবঙ্গ সেকশন */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin-bottom: 25px;
-    }
-
-    .stat-card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      border-top: 4px solid #b22222;
-    }
-
-    .stat-card.wb { border-top-color: #1e88e5; }
-
-    .stat-counters {
-      display: flex;
-      justify-content: space-between;
-      margin: 15px 0;
-      background: #f8f9fa;
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    .counter-box { text-align: center; }
-    .counter-box span { display: block; font-size: 18px; font-weight: bold; color: #b22222; }
-    .stat-card.wb .counter-box span { color: #1e88e5; }
-    .counter-box label { font-size: 12px; color: #666; }
-
-    .search-box input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      outline: none;
-    }
-
-    /* ৫. সোশ্যাল ফিড ও মতামত */
-    .social-feed, .blood-section {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom: 25px;
-    }
-
-    .post-input-box textarea {
-      width: 100%;
-      height: 80px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      resize: none;
-      outline: none;
-      margin: 10px 0;
-    }
-
-    .post-actions { display: flex; justify-content: space-between; }
-
-    .btn {
-      background-color: #b22222;
-      color: #fff;
-      padding: 8px 18px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    /* ডায়নামিক কন্টেন্ট ডিসপ্লে এলাকা (খালি) */
-    .posts-list, .blood-posts-list {
-      margin-top: 15px;
-    }
-
-    /* ৬. সতর্কতামূলক পপ-আপ */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    .modal-card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 450px;
-      width: 90%;
-      text-align: center;
-    }
-
-    .modal-card h2 { color: #b22222; margin-bottom: 10px; }
-    .modal-card p { font-size: 14px; color: #555; margin-bottom: 15px; }
-    .checkbox-container { font-size: 14px; margin-bottom: 20px; display: block; }
-    .btn:disabled { background-color: #ccc; cursor: not-allowed; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Friends with Blood Donation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        @keyframes bgDynamicColor {
+            0% { background-color: #dc2626; }
+            50% { background-color: #16a34a; }
+            100% { background-color: #dc2626; }
+        }
+        .dynamic-header { animation: bgDynamicColor 8s infinite ease-in-out; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 font-sans pb-20 min-h-screen flex flex-col">
 
-  <!-- সতর্কতামূলক পপ-আপ -->
-  <div id="warningModal" class="modal-overlay">
-    <div class="modal-card">
-      <h2>⚠️ সতর্কতামূলক নোটিশ</h2>
-      <p>আমাদের প্ল্যাটফর্মে স্বাগতম! যেকোনো তথ্য প্রদান, রক্ত চাওয়া বা মতামত প্রকাশের ক্ষেত্রে সঠিক তথ্য প্রদান করুন। ভুয়া বা বিভ্রান্তিকর তথ্য প্রদান করা সম্পূর্ণ নিষেধ।</p>
-      <label class="checkbox-container">
-        <input type="checkbox" id="agreeCheck"> আমি সকল নিয়মাবলী মেনে চলতে সম্মত।
-      </label>
-      <button id="enterBtn" class="btn" onclick="closeModal()" disabled>সাইটে প্রবেশ করুন</button>
+    <!-- ১. বিসমিল্লাহ -->
+    <div class="bg-black text-amber-400 text-center text-xs py-1 font-bold tracking-widest shadow">
+        بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
     </div>
-  </div>
 
-  <!-- ১. হেডার -->
-  <header class="top-header">
-    <div class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
-    <div class="org-name-container">
-      <div class="org-name">Make Friends With Blood Donation</div>
-    </div>
-  </header>
-
-  <!-- ২. নেভিগেশন বার (NAVBAR) -->
-  <nav class="navbar">
-    <a href="index.html" class="active">হোম</a>
-    <a href="auth.html">রেজিস্ট্রেশন / লগইন</a>
-    <a href="#feed">মতামত ও পোস্ট</a>
-    <a href="#blood">জরুরি রক্ত</a>
-    <a href="dashboard.html">ড্যাশবোর্ড</a>
-  </nav>
-
-  <!-- ৩. লাইভ নোটিশ বার -->
-  <div class="notice-ticker">
-    <div class="notice-badge">জরুরি নোটিশ</div>
-    <div class="notice-text">
-      <marquee id="liveNotice" onmouseover="this.stop();" onmouseout="this.start();">
-        নোটিশ আপডেট হচ্ছে...
-      </marquee>
-    </div>
-  </div>
-
-  <div class="container">
-
-    <!-- ৪. বাংলাদেশ ও পশ্চিমবঙ্গ কাউন্টার এবং আলাদা সার্চ -->
-    <div class="stats-grid">
-      
-      <!-- বাংলাদেশ -->
-      <div class="stat-card">
-        <h3>🇧🇩 বাংলাদেশ</h3>
-        <div class="stat-counters">
-          <div class="counter-box"><span id="bdReg">0</span><label>রেজিস্টার্ড</label></div>
-          <div class="counter-box"><span id="bdActive">0</span><label>এক্টিভ</label></div>
-          <div class="counter-box"><span id="bdReady">0</span><label>রেডি ডোনার</label></div>
+    <!-- ২. ডায়নামিক হেডার -->
+    <header class="dynamic-header text-white shadow-md transition-colors duration-1000">
+        <div class="max-w-6xl mx-auto px-4 py-3 text-center">
+            <h1 class="font-bold text-lg tracking-wide">MAKE FRIENDS WITH BLOOD DONATION</h1>
+            <p class="text-xs opacity-90">বাংলাদেশ ও পশ্চিমবঙ্গ অঞ্চলের রক্তদান প্ল্যাটফর্ম</p>
         </div>
-        <div class="search-box">
-          <input type="text" placeholder="বাংলাদেশ থেকে সার্চ করুন...">
-        </div>
-      </div>
+    </header>
 
-      <!-- পশ্চিমবঙ্গ -->
-      <div class="stat-card wb">
-        <h3>🇮🇳 পশ্চিমবঙ্গ</h3>
-        <div class="stat-counters">
-          <div class="counter-box"><span id="wbReg">0</span><label>রেজিস্টার্ড</label></div>
-          <div class="counter-box"><span id="wbActive">0</span><label>এক্টিভ</label></div>
-          <div class="counter-box"><span id="wbReady">0</span><label>রেডি ডোনার</label></div>
-        </div>
-        <div class="search-box">
-          <input type="text" placeholder="পশ্চিমবঙ্গ থেকে সার্চ করুন...">
-        </div>
-      </div>
-
+    <!-- ৩. এডমিন নোটিশ -->
+    <div class="bg-amber-100 border-y border-amber-300 text-amber-900 px-4 py-2 text-xs flex items-center gap-2">
+        <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">ঘোষণা</span>
+        <marquee behavior="scroll" direction="left" class="font-semibold">
+            জরুরি ঘোষণা: রক্তদান একটি সম্পূর্ণ স্বেচ্ছাসেবী কাজ। কোনো প্রকার আর্থিক লেনদেন করবেন না। নারী ডোনারদের তথ্য সম্পূর্ণ নিরাপদ ও সুরক্ষিত রাখা হয়।
+        </marquee>
     </div>
 
-    <!-- ৫. সোশ্যাল ফিড ও মতামত -->
-    <div class="social-feed" id="feed">
-      <h3>💬 মতামত ও পোস্ট করুন</h3>
-      <div class="post-input-box">
-        <textarea placeholder="আপনার মতামত বা পোস্ট লিখুন..."></textarea>
-      </div>
-      <div class="post-actions">
-        <input type="file" id="postImage" style="display: none;">
-        <button class="btn" style="background: #555;" onclick="document.getElementById('postImage').click()">📷 ছবি</button>
-        <button class="btn">পোস্ট করুন</button>
-      </div>
+    <!-- ৪. মূল কনটেন্ট -->
+    <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow">
 
-      <!-- পোস্টগুলো ডাটাবেজ থেকে এখানে আসবে (এখন খালি) -->
-      <div class="posts-list" id="userPosts"></div>
+        <div class="bg-white p-3 rounded-2xl shadow-sm mb-6 flex justify-center gap-6 border">
+            <label class="flex items-center gap-2 cursor-pointer font-bold text-sm text-red-600">
+                <input type="radio" name="donation_type" value="blood" checked class="accent-red-600"> 🩸 সম্পূর্ণ রক্ত
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer font-bold text-sm text-amber-600">
+                <input type="radio" name="donation_type" value="platelet" class="accent-amber-600"> ⚡ প্লেটলেট (Platelet)
+            </label>
+        </div>
+
+        <!-- ৫. বাংলাদেশ ও পশ্চিমবঙ্গের লাইভ পরিসংখ্যান -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <!-- বাংলাদেশ পরিসংখ্যান -->
+            <div class="bg-gradient-to-br from-red-50 to-white p-4 rounded-2xl border border-red-200 shadow-sm">
+                <h4 class="font-bold text-xs text-red-700 mb-3 flex items-center gap-2">
+                    🇧🇩 বাংলাদেশ অঞ্চল ডোনার সামারি
+                </h4>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-white p-2 rounded-xl border shadow-xs">
+                        <span id="bd-total-count" class="block font-extrabold text-sm text-gray-800">0</span>
+                        <span class="text-[9px] text-gray-500 font-semibold">মোট রেজিস্টার্ড</span>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl border shadow-xs">
+                        <span id="bd-active-count" class="block font-extrabold text-sm text-green-600">0</span>
+                        <span class="text-[9px] text-gray-500 font-semibold">একটিভ ডোনার</span>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl border shadow-xs">
+                        <span id="bd-ready-count" class="block font-extrabold text-sm text-blue-600">0</span>
+                        <span class="text-[9px] text-gray-500 font-semibold">প্রস্তুত ডোনার</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- পশ্চিমবঙ্গ পরিসংখ্যান -->
+            <div class="bg-gradient-to-br from-green-50 to-white p-4 rounded-2xl border border-green-200 shadow-sm">
+                <h4 class="font-bold text-xs text-green-700 mb-3 flex items-center gap-2">
+                    🇮🇳 পশ্চিমবঙ্গ অঞ্চল ডোনার সামারি
+                </h4>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-white p-2 rounded-xl border shadow-xs">
+                        <span id="wb-total-count" class="block font-extrabold text-sm text-gray-800">0</span>
+                        <span class="text-[9px] text-gray-500 font-semibold">মোট রেজিস্টার্ড</span>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl border shadow-xs">
+                        <span id="wb-active-count" class="block font-extrabold text-sm text-green-600">0</span>
+                        <span class="text-[9px] text-gray-500 font-semibold">একটিভ ডোনার</span>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl border shadow-xs">
+                        <span id="wb-ready-count" class="block font-extrabold text-sm text-blue-600">0</span>
+                        <span class="text-[9px] text-gray-500 font-semibold">প্রস্তুত ডোনার</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ৬. অঞ্চলভিত্তিক সার্চ ফিল্টার -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- বাংলাদেশ -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-red-600">
+                <h3 class="font-bold text-gray-800 text-base mb-3 flex items-center gap-2">🇧🇩 বাংলাদেশ ফিল্টার</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <select id="bd-division" onchange="loadBDDistricts()" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">বিভাগ</option>
+                    </select>
+                    <select id="bd-district" onchange="loadBDUpazilas()" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">জেলা</option>
+                    </select>
+                    <select id="bd-upazila" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">উপজেলা</option>
+                    </select>
+                    <select id="bd-blood" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">গ্রুপ</option>
+                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                    </select>
+                </div>
+                <button onclick="searchDonors('bd')" class="w-full bg-red-600 text-white font-bold text-xs py-2.5 rounded-xl mt-3 hover:bg-red-700 transition">রক্তদাতা খুঁজুন</button>
+            </div>
+
+            <!-- পশ্চিমবঙ্গ -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-green-600">
+                <h3 class="font-bold text-gray-800 text-base mb-3 flex items-center gap-2">🇮🇳 পশ্চিমবঙ্গ ফিল্টার</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <select id="wb-division" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">ডিভিশন</option>
+                        <option>প্রেসিডেন্সি</option><option>মেদিনীপুর</option><option>বর্ধমান</option><option>মালদা</option><option>জলপাইগুড়ি</option>
+                    </select>
+                    <select id="wb-district" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">জেলা</option>
+                        <option>কলকাতা</option><option>উত্তর ২৪ পরগনা</option><option>দক্ষিণ ২৪ পরগনা</option><option>হাওড়া</option><option>হুগলি</option><option>মুর্শিদাবাদ</option>
+                    </select>
+                    <select id="wb-block" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">ব্লক/মহকুমা</option>
+                    </select>
+                    <select id="wb-blood" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">গ্রুপ</option>
+                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                    </select>
+                </div>
+                <button onclick="searchDonors('wb')" class="w-full bg-green-600 text-white font-bold text-xs py-2.5 rounded-xl mt-3 hover:bg-green-700 transition">রক্তদাতা খুঁজুন</button>
+            </div>
+        </div>
+
+        <!-- সার্চ রেজাল্ট -->
+        <div id="search-results-section" class="mb-8 hidden">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">অনুসন্ধানের ফলাফল:</h3>
+            <div id="results-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- ৭. হোমপেজে লাইভ জরুরি রক্তের আবেদন ফিড -->
+        <section class="bg-white p-4 rounded-2xl shadow-sm mb-8 border border-red-100">
+            <div class="flex justify-between items-center border-b pb-2 mb-4">
+                <h3 class="font-bold text-red-600 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-truck-medical animate-bounce"></i> লাইভ জরুরি রক্তের আবেদন
+                </h3>
+                <button onclick="toggleModal('motamot-modal')" class="text-[10px] bg-red-100 text-red-600 font-bold px-2.5 py-1 rounded-lg">জরুরি পোস্ট করুন</button>
+            </div>
+
+            <!-- জরুরি পোস্ট ফিড (একটার পর একটা দেখাবে) -->
+            <div id="home-emergency-feed" class="space-y-3">
+                <div class="text-center py-6 text-gray-400 text-xs">
+                    এখনো কোনো জরুরি রক্তের আবেদন করা হয়নি।
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ৮. শর্তাবলী মডাল -->
+    <div id="notice-modal" class="fixed inset-0 bg-black/70 flex justify-center items-center p-4 z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl">
+            <div class="text-red-600 text-4xl mb-3"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h3 class="font-bold text-gray-800 text-base mb-2">জরুরি নিয়মাবলী</h3>
+            <p class="text-xs text-gray-600 mb-6 leading-relaxed text-justify">
+                রক্তদান একটি সম্পূর্ণ মানবিক কাজ। কোনো প্রকার অর্থের বিনিময়ে রক্ত আদান-প্রদান সম্পূর্ণ নিষিদ্ধ। নারী রক্তদাতাদের নিরাপত্তা ও গোপনীয়তা সুনিশ্চিত করা হয়েছে।
+            </p>
+            <button onclick="document.getElementById('notice-modal').classList.add('hidden')" class="w-full bg-red-600 text-white font-bold text-xs py-3 rounded-xl shadow hover:bg-red-700">আমি সম্মত</button>
+        </div>
     </div>
 
-    <!-- ৬. জরুরি রক্তের প্রয়োজন -->
-    <div class="blood-section" id="blood">
-      <h3>🚨 জরুরি রক্তের প্রয়োজন</h3>
-      
-      <!-- রক্তের রিকোয়েস্টগুলো ডাটাবেজ থেকে এখানে আসবে (এখন খালি) -->
-      <div class="blood-posts-list" id="bloodRequests"></div>
+    <!-- ৯. নেভিগেশন বার -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
+        <div class="max-w-md mx-auto flex justify-between items-center px-4 py-2">
+            <button onclick="location.reload()" class="flex flex-col items-center text-red-600">
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="text-[9px] font-bold">হোম</span>
+            </button>
+            <button onclick="toggleModal('reg-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
+                <i class="fa-solid fa-user-plus text-base"></i>
+                <span class="text-[9px] font-bold">রেজিস্ট্রেশন</span>
+            </button>
+            <button id="nav-auth-btn" onclick="handleAuthNavClick()" class="flex flex-col items-center text-gray-500 hover:text-red-600">
+                <i id="nav-auth-icon" class="fa-solid fa-right-to-bracket text-base"></i>
+                <span id="nav-auth-text" class="text-[9px] font-bold">লগইন</span>
+            </button>
+            <!-- মতামত (পোস্ট, স্টোরি, কমেন্ট ও চ্যাটিং) -->
+            <button onclick="toggleModal('motamot-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600 relative">
+                <span class="absolute -top-1 right-2 flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                </span>
+                <i class="fa-solid fa-comments text-base"></i>
+                <span class="text-[9px] font-bold">মতামত</span>
+            </button>
+            <button onclick="toggleModal('contact-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
+                <i class="fa-solid fa-headset text-base"></i>
+                <span class="text-[9px] font-bold">যোগাযোগ</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ১০. "মতামত" (পোস্ট, স্টোরি, লাইক, কমেন্ট ও চ্যাটিং) -->
+    <div id="motamot-modal" class="fixed inset-0 bg-black/80 hidden flex justify-center items-center p-2 sm:p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-lg w-full h-[90vh] flex flex-col shadow-2xl relative overflow-hidden">
+            
+            <!-- হেডার -->
+            <div class="bg-gradient-to-r from-red-600 to-rose-600 text-white p-3 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-comments text-lg"></i> মতামত ও সোশ্যাল ফিড
+                </h3>
+                <button onclick="toggleModal('motamot-modal')" class="text-white hover:bg-white/20 px-2 py-1 rounded-lg text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- মূল বডি -->
+            <div class="flex-grow overflow-y-auto p-3 space-y-4">
+                
+                <!-- স্টোরি সেকশন (Story Feature) -->
+                <div>
+                    <h4 class="font-bold text-[11px] text-gray-500 mb-2">ডোনার স্টোরি (Story)</h4>
+                    <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                        <!-- স্টোরি যোগ করুন -->
+                        <div onclick="addStory()" class="flex-shrink-0 w-16 h-24 bg-gray-100 rounded-xl border border-dashed border-red-400 flex flex-col justify-center items-center cursor-pointer hover:bg-red-50">
+                            <i class="fa-solid fa-plus-circle text-red-600 text-xl mb-1"></i>
+                            <span class="text-[8px] font-bold text-gray-600">স্টোরি দিন</span>
+                        </div>
+                        <div id="story-container" class="flex gap-2"></div>
+                    </div>
+                </div>
+
+                <!-- মতামত/পোস্ট লেখার বক্স -->
+                <div class="bg-gray-50 p-3 rounded-xl border">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-solid fa-circle-user text-xl text-gray-400"></i>
+                        <span class="text-xs font-bold text-gray-700" id="motamot-user-display">অতিথি ডোনার</span>
+                    </div>
+                    <textarea id="motamot-post-input" placeholder="আপনার মতামত অথবা জরুরি রক্তের কথা লিখুন..." class="w-full p-2 text-xs bg-white border rounded-xl outline-none resize-none" rows="2"></textarea>
+                    
+                    <div class="flex justify-between items-center mt-2">
+                        <label class="flex items-center gap-1 cursor-pointer text-[10px] font-bold text-red-600">
+                            <input type="checkbox" id="is-emergency-check" class="accent-red-600"> 🩸 জরুরি রক্তের আবেদন?
+                        </label>
+                        <button onclick="publishMotamotPost()" class="bg-red-600 text-white font-bold text-xs px-4 py-1.5 rounded-lg shadow hover:bg-red-700">পোস্ট করুন</button>
+                    </div>
+                </div>
+
+                <!-- পোস্ট ফিড -->
+                <div id="motamot-posts-feed" class="space-y-3"></div>
+
+            </div>
+        </div>
     </div>
 
-  </div>
+    <!-- ১১. চ্যাটিং / ইনবক্স মডাল (Direct Chatting System) -->
+    <div id="chat-modal" class="fixed inset-0 bg-black/80 hidden flex justify-center items-center p-2 sm:p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-sm w-full h-[80vh] flex flex-col shadow-2xl relative">
+            <div class="bg-red-600 text-white p-3 flex justify-between items-center rounded-t-2xl">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                    <h4 class="font-bold text-xs" id="chat-recipient-name">চ্যাটিং বার্তা</h4>
+                </div>
+                <button onclick="toggleModal('chat-modal')" class="text-white hover:bg-white/20 px-2 py-0.5 rounded text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-  <script>
-    // সতর্কতা পপ-আপ লজিক
-    document.getElementById('agreeCheck').addEventListener('change', function() {
-      document.getElementById('enterBtn').disabled = !this.checked;
-    });
+            <!-- চ্যাট বক্স বডি -->
+            <div id="chat-messages-container" class="flex-grow p-3 overflow-y-auto space-y-2 bg-gray-50 text-xs">
+                <div class="text-center text-gray-400 text-[10px]">নিরাপদে কথা বলুন। নারী ডোনারদের সম্মান প্রদর্শন করুন।</div>
+            </div>
 
-    function closeModal() {
-      document.getElementById('warningModal').style.display = 'none';
-    }
-  </script>
+            <!-- ইনপুট ও পাঠান -->
+            <div class="p-2 bg-white border-t flex gap-2 rounded-b-2xl">
+                <input id="chat-input-text" type="text" placeholder="মেসেজ লিখুন..." class="flex-grow p-2 text-xs border rounded-xl outline-none">
+                <button onclick="sendChatMessage()" class="bg-red-600 text-white font-bold text-xs px-3 py-2 rounded-xl">পাঠান</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- ১২. রেজিস্ট্রেশন মডাল (মেমেয়েদের সিকিউরিটিসমেত) -->
+    <div id="reg-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 my-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleModal('reg-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-id-card text-red-600"></i> ডোনার রেজিস্ট্রেশন
+            </h3>
+            
+            <form onsubmit="handleRegistration(event)" class="space-y-3">
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="reg-country" required class="p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="bd">🇧🇩 বাংলাদেশ</option>
+                        <option value="wb">🇮🇳 পশ্চিমবঙ্গ</option>
+                    </select>
+                    <select id="reg-blood" required class="p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">রক্তের গ্রুপ</option>
+                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                    </select>
+                </div>
+                
+                <!-- লিঙ্ক/Gender সিলেক্ট (মেমেয়েদের সিকিউরিটির জন্য) -->
+                <div>
+                    <select id="reg-gender" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">লিঙ্গ নির্বাচন করুন</option>
+                        <option value="male">পুরুষ (Male)</option>
+                        <option value="female">মহিলা (Female) - নম্বর সুরক্ষিত থাকবে</option>
+                        <option value="other">অন্যান্য</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <input id="reg-fullname" type="text" placeholder="পূর্ণ নাম" required class="p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                    <input id="reg-nickname" type="text" placeholder="ডাকনাম" required class="p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="reg-division" onchange="loadRegDistricts()" required class="p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">বিভাগ</option>
+                    </select>
+                    <select id="reg-district" onchange="loadRegUpazilas()" required class="p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">জেলা</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="reg-upazila" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                        <option value="">উপজেলা</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-500">সর্বশেষ রক্তদানের তারিখ:</label>
+                    <input id="reg-lastdate" type="date" class="w-full p-2 border rounded-xl text-xs bg-gray-50 outline-none">
+                </div>
+                <input id="reg-phone" type="tel" placeholder="মোবাইল নম্বর" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                <input id="reg-password" type="password" placeholder="পাসওয়ার্ড" minlength="6" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                <input id="reg-address" type="text" placeholder="বিস্তারিত ঠিকানা" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+
+                <button type="submit" class="w-full bg-red-600 text-white font-bold text-xs py-2.5 rounded-xl shadow hover:bg-red-700">রেজিস্ট্রেশন সম্পূর্ণ করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ১৩. লগইন মডাল -->
+    <div id="login-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+            <button onclick="toggleModal('login-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-right-to-bracket text-green-600"></i> ডোনার লগইন
+            </h3>
+            <form onsubmit="handleLogin(event)" class="space-y-3">
+                <input id="login-phone" type="tel" placeholder="মোবাইল নম্বর" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                <input id="login-password" type="password" placeholder="পাসওয়ার্ড" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                <button type="submit" class="w-full bg-green-600 text-white font-bold text-xs py-2.5 rounded-xl shadow hover:bg-green-700">লগইন করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ১৪. ড্যাশবোর্ড মডাল -->
+    <div id="dashboard-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 my-6 shadow-2xl relative">
+            <button onclick="toggleModal('dashboard-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="font-bold text-gray-800 text-base mb-4 border-b pb-2">ডোনার ড্যাশবোর্ড</h3>
+
+            <div id="donor-card-pdf" class="bg-gradient-to-br from-red-600 to-red-800 text-white p-4 rounded-2xl shadow-lg mb-4 border-2 border-amber-400">
+                <div class="flex justify-between items-start mb-3 border-b border-red-400/50 pb-2">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-amber-300">মেম্বারশিপ কার্ড</p>
+                        <h4 class="font-bold text-xs">MAKE FRIENDS WITH BLOOD</h4>
+                    </div>
+                    <span class="bg-white text-red-600 font-extrabold text-xs px-2.5 py-1 rounded-full" id="dash-card-blood"></span>
+                </div>
+                <div class="space-y-1 text-xs">
+                    <p><b>নাম:</b> <span id="dash-card-fullname"></span> (<span id="dash-card-nickname"></span>)</p>
+                    <p><b>ফোন:</b> <span id="dash-card-phone"></span></p>
+                    <p><b>লিঙ্গ:</b> <span id="dash-card-gender"></span></p>
+                    <p><b>ঠিকানা:</b> <span id="dash-card-address"></span></p>
+                </div>
+            </div>
+
+            <button onclick="downloadPDFCard()" class="w-full bg-amber-500 text-black font-bold text-xs py-2 rounded-xl mb-3 shadow">আইডি কার্ড PDF ডাউনলোড</button>
+            <button onclick="handleLogout()" class="w-full bg-gray-200 text-gray-700 font-bold text-xs py-2 rounded-xl hover:bg-red-100 hover:text-red-600">লগআউট</button>
+        </div>
+    </div>
+
+    <!-- ১৫. যোগাযোগের তথ্য মডাল -->
+    <div id="contact-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="toggleModal('contact-modal')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 class="font-bold text-red-600 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-headset text-lg"></i> জরুরি যোগাযোগ
+                </h3>
+                <button onclick="openAdminLogin()" class="text-[10px] bg-gray-800 text-white px-2.5 py-1 rounded-lg font-bold hover:bg-black">
+                    <i class="fa-solid fa-lock"></i> এডমিন
+                </button>
+            </div>
+
+            <div class="bg-red-50 p-4 rounded-xl border border-red-100 text-xs space-y-3">
+                <p><b>ইমেইল:</b> makefriendswithblooddonation18@gmail.com</p>
+                <p><b>হেল্পলাইন:</b> 09638927067</p>
+                <p><b>জরুরি মাদক দমন হটলাইন:</b> 01784304151</p>
+                <p><b>হোয়াটসঅ্যাপ সাপোর্ট:</b> <a href="https://wa.me/8809638927067" class="text-green-600 font-bold underline">মেসেজ দিন</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ১৬. এডমিন প্যানেল -->
+    <div id="admin-login-modal" class="fixed inset-0 bg-black/70 hidden flex justify-center items-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+            <button onclick="toggleModal('admin-login-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-user-lock text-red-600"></i> এডমিন লগইন
+            </h3>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-3">
+                <input id="admin-user" type="text" placeholder="এডমিন ইউজারনেম" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                <input id="admin-pass" type="password" placeholder="গোপন পাসওয়ার্ড" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
+                <button type="submit" class="w-full bg-gray-900 text-white font-bold text-xs py-2.5 rounded-xl shadow hover:bg-black">প্রবেশ করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-panel-modal" class="fixed inset-0 bg-black/80 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 my-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 class="font-bold text-red-600 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved"></i> এডমিন কন্ট্রোল প্যানেল
+                </h3>
+                <button onclick="toggleModal('admin-panel-modal')" class="bg-red-100 text-red-600 px-3 py-1 rounded-lg text-xs font-bold">বন্ধ করুন</button>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-xs text-amber-900 mb-2">লাইভ এডমিন নোটিশ পরিবর্তন:</h4>
+                    <div class="flex gap-2">
+                        <input id="admin-notice-input" type="text" placeholder="নতুন নোটিশ লিখুন..." class="flex-grow p-2 text-xs border rounded-lg outline-none">
+                        <button onclick="updateNoticeText()" class="bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-amber-700">আপডেট</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- জাভাস্ক্রিপ্ট লজিক -->
+    <script>
+        let currentUser = null;
+        let activeChatUser = null;
+        let postsList = JSON.parse(localStorage.getItem('motamot_posts') || '[]');
+        let storyList = JSON.parse(localStorage.getItem('motamot_stories') || '[]');
+        let chatData = JSON.parse(localStorage.getItem('motamot_chats') || '{}');
+
+        const locationDataBD = {
+            "ঢাকা": {
+                "ঢাকা": ["মিরপুর", "ধানমন্ডি", "উত্তরা", "গুলশান", "মোহাম্মদপুর", "সাভার", "ধামরাই", "কেরানীগঞ্জ"],
+                "গাজীপুর": ["গাজীপুর সদর", "কালীগঞ্জ", "কপাসিয়া", "শ্রীপুর", "কালিয়াকৈর"]
+            },
+            "রংপুর": {
+                "রংপুর": ["রংপুর সদর", "মিঠাপুকুর", "পীরগঞ্জ", "কাউনিয়া"],
+                "দিনাজপুর": ["দিনাজপুর সদর", "ফুলবাড়ী", "বিরামপুর", "বীরগঞ্জ"],
+                "পঞ্চগড়": ["পঞ্চগড় সদর", "দেবীগঞ্জ", "বোদা", "অটোয়ারী", "তেঁতুলিয়া"]
+            }
+        };
+
+        function initBDLocations() {
+            const divSelect = document.getElementById('bd-division');
+            const regDivSelect = document.getElementById('reg-division');
+            Object.keys(locationDataBD).forEach(div => {
+                divSelect.innerHTML += `<option value="${div}">${div}</option>`;
+                regDivSelect.innerHTML += `<option value="${div}">${div}</option>`;
+            });
+            updateStatsCounter();
+            renderMotamotPosts();
+            renderStories();
+        }
+
+        function loadBDDistricts() {
+            const div = document.getElementById('bd-division').value;
+            const distSelect = document.getElementById('bd-district');
+            distSelect.innerHTML = '<option value="">জেলা</option>';
+            document.getElementById('bd-upazila').innerHTML = '<option value="">উপজেলা</option>';
+
+            if (div && locationDataBD[div]) {
+                Object.keys(locationDataBD[div]).forEach(dist => {
+                    distSelect.innerHTML += `<option value="${dist}">${dist}</option>`;
+                });
+            }
+        }
+
+        function loadBDUpazilas() {
+            const div = document.getElementById('bd-division').value;
+            const dist = document.getElementById('bd-district').value;
+            const upazilaSelect = document.getElementById('bd-upazila');
+            upazilaSelect.innerHTML = '<option value="">উপজেলা</option>';
+
+            if (div && dist && locationDataBD[div][dist]) {
+                locationDataBD[div][dist].forEach(upa => {
+                    upazilaSelect.innerHTML += `<option value="${upa}">${upa}</option>`;
+                });
+            }
+        }
+
+        function loadRegDistricts() {
+            const div = document.getElementById('reg-division').value;
+            const distSelect = document.getElementById('reg-district');
+            distSelect.innerHTML = '<option value="">জেলা</option>';
+            if (div && locationDataBD[div]) {
+                Object.keys(locationDataBD[div]).forEach(dist => {
+                    distSelect.innerHTML += `<option value="${dist}">${dist}</option>`;
+                });
+            }
+        }
+
+        function loadRegUpazilas() {
+            const div = document.getElementById('reg-division').value;
+            const dist = document.getElementById('reg-district').value;
+            const upaSelect = document.getElementById('reg-upazila');
+            upaSelect.innerHTML = '<option value="">উপজেলা</option>';
+            if (div && dist && locationDataBD[div][dist]) {
+                locationDataBD[div][dist].forEach(upa => {
+                    upaSelect.innerHTML += `<option value="${upa}">${upa}</option>`;
+                });
+            }
+        }
+
+        window.onload = initBDLocations;
+
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        function handleRegistration(e) {
+            e.preventDefault();
+            const country = document.getElementById('reg-country').value;
+            const gender = document.getElementById('reg-gender').value;
+            const fullname = document.getElementById('reg-fullname').value;
+            const nickname = document.getElementById('reg-nickname').value;
+            const phone = document.getElementById('reg-phone').value;
+            const password = document.getElementById('reg-password').value;
+            const blood = document.getElementById('reg-blood').value;
+            const address = document.getElementById('reg-address').value;
+
+            const userData = { country, gender, fullname, nickname, phone, password, blood, address, isReady: true };
+            localStorage.setItem(`user_${phone}`, JSON.stringify(userData));
+
+            let allUsers = JSON.parse(localStorage.getItem('all_donors') || '[]');
+            allUsers.push(userData);
+            localStorage.setItem('all_donors', JSON.stringify(allUsers));
+
+            alert("রেজিস্ট্রেশন সফল হয়েছে! আপনার তথ্য যুক্ত করা হয়েছে।");
+            updateStatsCounter();
+            toggleModal('reg-modal');
+            toggleModal('login-modal');
+        }
+
+        function updateStatsCounter() {
+            let allUsers = JSON.parse(localStorage.getItem('all_donors') || '[]');
+            let bdDonors = allUsers.filter(u => u.country === 'bd');
+            let wbDonors = allUsers.filter(u => u.country === 'wb');
+
+            document.getElementById('bd-total-count').innerText = bdDonors.length;
+            document.getElementById('bd-active-count').innerText = bdDonors.length;
+            document.getElementById('bd-ready-count').innerText = bdDonors.filter(u => u.isReady).length;
+
+            document.getElementById('wb-total-count').innerText = wbDonors.length;
+            document.getElementById('wb-active-count').innerText = wbDonors.length;
+            document.getElementById('wb-ready-count').innerText = wbDonors.filter(u => u.isReady).length;
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const phone = document.getElementById('login-phone').value;
+            const password = document.getElementById('login-password').value;
+            const savedUser = localStorage.getItem(`user_${phone}`);
+
+            if (savedUser) {
+                const userObj = JSON.parse(savedUser);
+                if (userObj.password === password) {
+                    currentUser = userObj;
+                    updateDashboardUI();
+                    toggleModal('login-modal');
+                    alert(`স্বাগতম, ${currentUser.fullname}!`);
+                    return;
+                }
+            }
+            alert("ভুল নম্বর অথবা পাসওয়ার্ড দেওয়া হয়েছে!");
+        }
+
+        function updateDashboardUI() {
+            document.getElementById('nav-auth-text').innerText = "ড্যাশবোর্ড";
+            document.getElementById('nav-auth-icon').className = "fa-solid fa-user-gear text-base text-red-600";
+            document.getElementById('motamot-user-display').innerText = `${currentUser.fullname} (${currentUser.blood})`;
+
+            document.getElementById('dash-card-fullname').innerText = currentUser.fullname;
+            document.getElementById('dash-card-nickname').innerText = currentUser.nickname;
+            document.getElementById('dash-card-blood').innerText = currentUser.blood;
+            
+            // মেয়েদের নম্বর সুরক্ষিত প্রদর্শনী
+            if(currentUser.gender === 'female') {
+                document.getElementById('dash-card-phone').innerText = currentUser.phone.replace(/(\d{3})\d{4}(\d{3})/, '$1****$2') + " (সুরক্ষিত)";
+            } else {
+                document.getElementById('dash-card-phone').innerText = currentUser.phone;
+            }
+
+            document.getElementById('dash-card-gender').innerText = currentUser.gender === 'female' ? 'মহিলা' : 'পুরুষ';
+            document.getElementById('dash-card-address').innerText = currentUser.address;
+        }
+
+        function handleAuthNavClick() {
+            if (currentUser) {
+                toggleModal('dashboard-modal');
+            } else {
+                toggleModal('login-modal');
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            document.getElementById('nav-auth-text').innerText = "লগইন";
+            document.getElementById('nav-auth-icon').className = "fa-solid fa-right-to-bracket text-base text-gray-500";
+            document.getElementById('motamot-user-display').innerText = "অতিথি ডোনার";
+            toggleModal('dashboard-modal');
+            alert("সফলভাবে লগআউট হয়েছেন।");
+        }
+
+        // --- মতামত (Motamot Platform) লজিক ---
+
+        function publishMotamotPost() {
+            const content = document.getElementById('motamot-post-input').value;
+            const isEmergency = document.getElementById('is-emergency-check').checked;
+
+            if (!content) {
+                alert("দয়া করে কিছু লিখুন!");
+                return;
+            }
+
+            const authorName = currentUser ? currentUser.fullname : "অজ্ঞাত ডোনার";
+            const bloodGroup = currentUser ? currentUser.blood : "🩸";
+
+            const newPost = {
+                id: Date.now(),
+                author: authorName,
+                blood: bloodGroup,
+                content: content,
+                isEmergency: isEmergency,
+                likes: 0,
+                comments: [],
+                time: "এইমাত্র"
+            };
+
+            postsList.unshift(newPost);
+            localStorage.setItem('motamot_posts', JSON.stringify(postsList));
+            
+            document.getElementById('motamot-post-input').value = '';
+            document.getElementById('is-emergency-check').checked = false;
+
+            renderMotamotPosts();
+            alert("মতামত প্রকাশ করা হয়েছে!");
+        }
+
+        function renderMotamotPosts() {
+            const feed = document.getElementById('motamot-posts-feed');
+            const homeFeed = document.getElementById('home-emergency-feed');
+
+            feed.innerHTML = '';
+            homeFeed.innerHTML = '';
+
+            if (postsList.length === 0) {
+                feed.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">এখনো কোনো মতামত পোস্ট নেই।</p>`;
+                homeFeed.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">এখনো কোনো জরুরি রক্তের আবেদন করা হয়নি।</p>`;
+                return;
+            }
+
+            let emergencyCount = 0;
+
+            postsList.forEach((post, index) => {
+                const postHTML = `
+                    <div class="bg-white p-3 rounded-xl border ${post.isEmergency ? 'border-red-400 bg-red-50/30' : ''}">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-[9px] shadow">
+                                    ${post.blood}
+                                </span>
+                                <div>
+                                    <h5 class="font-bold text-xs text-gray-800">${post.author}</h5>
+                                    <span class="text-[8px] text-gray-400">${post.time}</span>
+                                </div>
+                            </div>
+                            ${post.isEmergency ? '<span class="bg-red-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-full animate-pulse">জরুরি</span>' : ''}
+                        </div>
+                        <p class="text-xs text-gray-700 leading-relaxed mb-3">${post.content}</p>
+
+                        <!-- লাইক, কমেন্ট ও ইনবক্স/চ্যাট -->
+                        <div class="flex justify-between items-center border-t pt-2 text-xs text-gray-500">
+                            <button onclick="likePost(${index})" class="flex items-center gap-1 hover:text-red-600 font-semibold">
+                                <i class="fa-regular fa-heart text-red-500"></i>
+                                <span>${post.likes}</span>
+                            </button>
+                            <button onclick="toggleCommentBox(${index})" class="flex items-center gap-1 hover:text-blue-600 font-semibold">
+                                <i class="fa-regular fa-comment"></i> কমেন্ট (${post.comments.length})
+                            </button>
+                            <button onclick="openChatWith('${post.author}')" class="flex items-center gap-1 hover:text-green-600 font-semibold">
+                                <i class="fa-regular fa-paper-plane text-green-600"></i> মেসেজ
+                            </button>
+                        </div>
+
+                        <!-- কমেন্ট লিস্ট -->
+                        <div id="comment-box-${index}" class="hidden border-t mt-2 pt-2 space-y-2">
+                            <div class="space-y-1 max-h-24 overflow-y-auto" id="comments-list-${index}">
+                                ${post.comments.map(c => `<div class="bg-gray-100 p-1.5 rounded-lg text-[10px]"><b>${c.user}:</b> ${c.text}</div>`).join('')}
+                            </div>
+                            <div class="flex gap-1">
+                                <input id="comment-input-${index}" type="text" placeholder="কমেন্ট লিখুন..." class="flex-grow p-1 text-[10px] border rounded-lg outline-none">
+                                <button onclick="addComment(${index})" class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded-lg">পাঠান</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                feed.insertAdjacentHTML('beforeend', postHTML);
+
+                if (post.isEmergency) {
+                    emergencyCount++;
+                    const homePostHTML = `
+                        <div class="bg-red-50/60 p-3 rounded-xl border border-red-200 shadow-xs flex justify-between items-center">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-red-600 text-white font-extrabold text-[10px] px-2 py-0.5 rounded-full">${post.blood}</span>
+                                    <h5 class="font-bold text-xs text-gray-800">${post.author}</h5>
+                                </div>
+                                <p class="text-xs text-gray-700 font-medium">${post.content}</p>
+                            </div>
+                            <button onclick="openChatWith('${post.author}')" class="bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow hover:bg-red-700">সরাসরি চ্যাট</button>
+                        </div>
+                    `;
+                    homeFeed.insertAdjacentHTML('beforeend', homePostHTML);
+                }
+            });
+
+            if (emergencyCount === 0) {
+                homeFeed.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">এখনো কোনো জরুরি রক্তের আবেদন করা হয়নি।</p>`;
+            }
+        }
+
+        function likePost(index) {
+            postsList[index].likes += 1;
+            localStorage.setItem('motamot_posts', JSON.stringify(postsList));
+            renderMotamotPosts();
+        }
+
+        function toggleCommentBox(index) {
+            document.getElementById(`comment-box-${index}`).classList.toggle('hidden');
+        }
+
+        function addComment(index) {
+            const input = document.getElementById(`comment-input-${index}`);
+            const text = input.value;
+            if (!text) return;
+
+            const userName = currentUser ? currentUser.fullname : "ভিজিটর";
+            postsList[index].comments.push({ user: userName, text: text });
+            localStorage.setItem('motamot_posts', JSON.stringify(postsList));
+            renderMotamotPosts();
+        }
+
+        // --- স্টোরি লজিক ---
+        function addStory() {
+            const storyText = prompt("আপনার স্টোরিতে কি লিখতে চান? (যেমন: আজ রক্ত দান করলাম!)");
+            if (storyText) {
+                const authorName = currentUser ? currentUser.nickname : "ডোনার";
+                storyList.unshift({ name: authorName, text: storyText });
+                localStorage.setItem('motamot_stories', JSON.stringify(storyList));
+                renderStories();
+            }
+        }
+
+        function renderStories() {
+            const container = document.getElementById('story-container');
+            container.innerHTML = '';
+            storyList.forEach(s => {
+                const storyHTML = `
+                    <div class="flex-shrink-0 w-16 h-24 bg-gradient-to-b from-red-500 to-rose-700 text-white p-2 rounded-xl flex flex-col justify-between shadow-sm">
+                        <span class="text-[8px] font-bold bg-white/20 px-1 rounded">${s.name}</span>
+                        <p class="text-[9px] font-semibold leading-tight line-clamp-3">${s.text}</p>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', storyHTML);
+            });
+        }
+
+        // --- চ্যাটিং লজিক (Chatting Feature) ---
+        function openChatWith(userName) {
+            activeChatUser = userName;
+            document.getElementById('chat-recipient-name').innerText = `${userName}-এর সাথে কথা বলছেন`;
+            toggleModal('chat-modal');
+            renderChatMessages();
+        }
+
+        function sendChatMessage() {
+            const textInput = document.getElementById('chat-input-text');
+            const text = textInput.value;
+            if (!text || !activeChatUser) return;
+
+            const sender = currentUser ? currentUser.fullname : "ভিজিটর";
+            
+            if (!chatData[activeChatUser]) {
+                chatData[activeChatUser] = [];
+            }
+
+            chatData[activeChatUser].push({ sender: sender, text: text });
+            localStorage.setItem('motamot_chats', JSON.stringify(chatData));
+            
+            textInput.value = '';
+            renderChatMessages();
+        }
+
+        function renderChatMessages() {
+            const container = document.getElementById('chat-messages-container');
+            container.innerHTML = `<div class="text-center text-gray-400 text-[10px]">নিরাপদে কথা বলুন। নারী ডোনারদের সম্মান প্রদর্শন করুন।</div>`;
+
+            if (chatData[activeChatUser]) {
+                chatData[activeChatUser].forEach(msg => {
+                    const isMe = currentUser && msg.sender === currentUser.fullname;
+                    const msgHTML = `
+                        <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
+                            <div class="${isMe ? 'bg-red-600 text-white' : 'bg-white border text-gray-800'} p-2 rounded-xl max-w-[80%] shadow-xs">
+                                <span class="block text-[8px] opacity-75 font-bold">${msg.sender}</span>
+                                <span>${msg.text}</span>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', msgHTML);
+                });
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        function downloadPDFCard() {
+            const element = document.getElementById('donor-card-pdf');
+            html2pdf().from(element).save(`${currentUser.nickname}_Donor_Card.pdf`);
+        }
+
+        function searchDonors(region) {
+            alert("অনুসন্ধান করা হচ্ছে...");
+        }
+
+        function openAdminLogin() {
+            toggleModal('contact-modal');
+            toggleModal('admin-login-modal');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+
+            if (u === "admin" && p === "admin123") {
+                toggleModal('admin-login-modal');
+                toggleModal('admin-panel-modal');
+                alert("এডমিন ড্যাশবোর্ডে প্রবেশ করেছেন!");
+            } else {
+                alert("ভুল এডমিন পাসওয়ার্ড!");
+            }
+        }
+
+        function updateNoticeText() {
+            const text = document.getElementById('admin-notice-input').value;
+            if (text) {
+                document.querySelector('marquee').innerText = text;
+                alert("লাইভ নোটিশ আপডেট হয়েছে!");
+                document.getElementById('admin-notice-input').value = '';
+            }
+        }
+    </script>
 </body>
-      </html>
-  
+</html>
