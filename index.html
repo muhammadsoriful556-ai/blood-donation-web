@@ -278,7 +278,7 @@
         </div>
     </div>
 
-    <script>
+ <script>
         // বাংলাদেশ ও পশ্চিমবঙ্গ প্রশাসনিক তথ্য
         const locationData = {
             bd: {
@@ -287,4 +287,75 @@
                 "রাজশাহী": ["রাজশাহী", "বগুড়া", "পাবনা", "সিরাজগঞ্জ", "নওগাঁ", "নাটোর", "জয়পুরহাট", "চাঁপাইনবাবগঞ্জ"],
                 "রংপুর": ["রংপুর", "দিনাজপুর", "গাইবান্ধা", "কুড়িগ্রাম", "লালমনিরহাট", "নীলফামারী", "পঞ্চগড়", "ঠাকুরগাঁও"],
                 "খুলনা": ["খুলনা", "যশোর", "সাতক্ষীরা", "ঝিনাইদহ", "কুষ্টিয়া", "বাগেরহাট", "চুয়াডাঙ্গা", "মেহেরপুর", "মাগুরা", "নড়াইল"],
-   
+                "বরিশাল": ["বরিশাল", "পটুয়াখালী", "ভোলা", "পিরোজপুর", "বরগুনা", "ঝালকাঠি"],
+                "সিলেট": ["সিলেট", "মৌলভীবাজার", "হবিগঞ্জ", "সুনামগঞ্জ"],
+                "ময়মনসিংহ": ["ময়মনসিংহ", "জামালপুর", "নেত্রকোনা", "শেরপুর"]
+            },
+            wb: {
+                "প্রেসিডেন্সি": ["কলকাতা", "উত্তর ২৪ পরগনা", "দক্ষিণ ২৪ পরগনা", "হাওড়া", "হুগলী", "নদীয়ায়"],
+                "মেদিনীপুর": ["পূর্ব মেদিনীপুর", "পশ্চিম মেদিনীপুর", "ঝাড়গ্রাম", "পুরুলিয়া", "বাঁকুড়া"],
+                "বর্ধমান": ["পূর্ব বর্ধমান", "পশ্চিম বর্ধমান", "বীরভূম", "মুর্শিদাবাদ"],
+                "মালদা": ["মালদা", "উত্তর দিনাজপুর", "দক্ষিণ দিনাজপুর", "মুর্শিদাবাদ"],
+                "জলপাইগুড়ি": ["জলপাইগুড়ি", "দার্জিলিং", "কালিম্পং", "কোচবিহার", "আলিপুরদুয়ার"]
+            }
+        };
+
+        // বিভাগ ও জেলা লোড ফাংশন
+        function initLocations() {
+            const bdDiv = document.getElementById('bd-division');
+            const wbDiv = document.getElementById('wb-division');
+            
+            Object.keys(locationData.bd).forEach(div => bdDiv.innerHTML += `<option value="${div}">${div}</option>`);
+            Object.keys(locationData.wb).forEach(div => wbDiv.innerHTML += `<option value="${div}">${div}</option>`);
+        }
+
+        function loadDistricts(region) {
+            const divVal = document.getElementById(`${region}-division`).value;
+            const distSelect = document.getElementById(`${region}-district`);
+            distSelect.innerHTML = '<option value="">জেলা নির্বাচন</option>';
+            
+            if (divVal && locationData[region][divVal]) {
+                locationData[region][divVal].forEach(dist => {
+                    distSelect.innerHTML += `<option value="${dist}">${dist}</option>`;
+                });
+            }
+        }
+
+        window.onload = initLocations;
+
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        function postFeedback(e) {
+            e.preventDefault();
+            const text = document.getElementById('feedback-text').value;
+            const list = document.getElementById('feedback-list');
+            const newFeedback = document.createElement('div');
+            newFeedback.className = "bg-gray-50 p-2.5 rounded-xl text-xs border border-gray-200";
+            newFeedback.innerHTML = `<p class="font-semibold text-gray-700">শুভাকাঙ্ক্ষী:</p><p class="text-gray-600">${text}</p>`;
+            list.prepend(newFeedback);
+            document.getElementById('feedback-text').value = '';
+        }
+
+        function handleRegistration(e) {
+            e.preventDefault();
+            alert("রেজিস্ট্রেশন জমা হয়েছে!");
+            toggleModal('reg-modal');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            alert("সফলভাবে লগইন হয়েছে!");
+            toggleModal('login-modal');
+        }
+
+        function searchDonors(region) {
+            const div = document.getElementById(`${region}-division`).value;
+            const dist = document.getElementById(`${region}-district`).value;
+            const blood = document.getElementById(`${region}-blood`).value;
+            alert(`অনুসন্ধান করা হচ্ছে: ${div || 'সব'}, ${dist || 'সব'}, গ্রুপ: ${blood || 'সব'}`);
+        }
+    </script>
+</body>
+</html>
