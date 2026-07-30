@@ -1,361 +1,368 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Make Friends with Blood Donation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        @keyframes bgDynamicColor {
-            0% { background-color: #dc2626; }
-            50% { background-color: #16a34a; }
-            100% { background-color: #dc2626; }
-        }
-        .dynamic-header {
-            animation: bgDynamicColor 8s infinite ease-in-out;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Make Friends With Blood Donation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f9;
+      color: #333;
+    }
+
+    /* ১. হেডার ও বিসমিল্লাহ সেকশন */
+    .top-header {
+      background: linear-gradient(135deg, #8b0000, #b22222);
+      color: #fff;
+      text-align: center;
+      padding: 15px 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .bismillah {
+      font-size: 26px;
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 5px;
+    }
+
+    .org-name-container {
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .org-name {
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      animation: moveLeftToRight 15s linear infinite;
+    }
+
+    @keyframes moveLeftToRight {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* ২. লাইভ নোটিশ বার */
+    .notice-ticker {
+      background-color: #222;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 8px 15px;
+    }
+
+    .notice-badge {
+      background-color: #e63946;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 14px;
+      margin-right: 15px;
+      white-space: nowrap;
+    }
+
+    .notice-text {
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .notice-text marquee {
+      font-size: 15px;
+    }
+
+    /* কন্টেইনার */
+    .container {
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    /* ৩. বাংলাদেশ ও পশ্চিমবঙ্গ কাউন্টার ও সার্চ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-top: 4px solid #b22222;
+    }
+
+    .stat-card.wb {
+      border-top-color: #1e88e5;
+    }
+
+    .stat-card h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-counters {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .counter-box {
+      text-align: center;
+    }
+
+    .counter-box span {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      color: #b22222;
+    }
+
+    .stat-card.wb .counter-box span {
+      color: #1e88e5;
+    }
+
+    .counter-box label {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    /* ৪. সোশ্যাল ফিড ও মতামত */
+    .social-feed {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 25px;
+    }
+
+    .post-input-box textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      resize: none;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    .post-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn {
+      background-color: #b22222;
+      color: #fff;
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* ৫. জরুরি রক্তের প্রয়োজন সেকশন */
+    .blood-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .blood-card {
+      background: #fff0f0;
+      border-left: 5px solid #b22222;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .blood-badge {
+      background: #b22222;
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    /* ৬. সতর্কতামূলক পপ-আপ মোডাল */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .modal-card h2 { color: #b22222; margin-bottom: 10px; }
+    .modal-card p { font-size: 14px; color: #555; margin-bottom: 15px; line-height: 1.5; }
+    .checkbox-container { font-size: 14px; margin-bottom: 20px; display: block; }
+    .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans pb-20 min-h-screen flex flex-col">
+<body>
 
-    <!-- ১. বিসমিল্লাহির রাহমানির রাহীম -->
-    <div class="bg-black text-amber-400 text-center text-xs py-1 font-bold tracking-widest shadow">
-        بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+  <!-- সতর্কতামূলক পপ-আপ -->
+  <div id="warningModal" class="modal-overlay">
+    <div class="modal-card">
+      <h2>⚠️ সতর্কতামূলক নোটিশ</h2>
+      <p>আমাদের প্ল্যাটফর্মে স্বাগতম! যেকোনো তথ্য প্রদান, রক্ত চাওয়া বা মতামত প্রকাশের ক্ষেত্রে সত্যতা বজায় রাখুন। কোনোপ্রকার ভুয়া বা বিভ্রান্তিকর পোস্ট করা নিষিদ্ধ।</p>
+      <label class="checkbox-container">
+        <input type="checkbox" id="agreeCheck"> আমি সকল নিয়মাবলী মেনে চলতে সম্মত।
+      </label>
+      <button id="enterBtn" class="btn" onclick="closeModal()" disabled>সাইটে প্রবেশ করুন</button>
+    </div>
+  </div>
+
+  <!-- ১. হেডার সেকশন -->
+  <header class="top-header">
+    <div class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+    <div class="org-name-container">
+      <div class="org-name">Make Friends With Blood Donation</div>
+    </div>
+  </header>
+
+  <!-- ২. নোটিশ বোর্ড -->
+  <div class="notice-ticker">
+    <div class="notice-badge">জরুরি নোটিশ</div>
+    <div class="notice-text">
+      <marquee onmouseover="this.stop();" onmouseout="this.start();">
+        রক্তদানের মাধ্যমে জীবন বাঁচান। যেকোনো জরুরি প্রয়োজনে আমাদের হটলাইনে যোগাযোগ করুন। সত্য তথ্য দিয়ে রেজিস্ট্রেশন সম্পন্ন করুন।
+      </marquee>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ৩. বাংলাদেশ ও পশ্চিমবঙ্গ কাউন্টার এবং সার্চ -->
+    <div class="stats-grid">
+      
+      <!-- বাংলাদেশ -->
+      <div class="stat-card">
+        <h3>🇧🇩 বাংলাদেশ সেকশন</h3>
+        <div class="stat-counters">
+          <div class="counter-box"><span>১২৫০</span><label>রেজিস্টার্ড</label></div>
+          <div class="counter-box"><span>৪৫০</span><label>এক্টিভ</label></div>
+          <div class="counter-box"><span>১৮০</span><label>রেডি ডোনার</label></div>
+        </div>
+        <div class="search-box">
+          <input type="text" placeholder="বাংলাদেশ থেকে ডোনার বা পোস্ট খুঁজুন...">
+        </div>
+      </div>
+
+      <!-- পশ্চিমবঙ্গ -->
+      <div class="stat-card wb">
+        <h3>🇮🇳 পশ্চিমবঙ্গ সেকশন</h3>
+        <div class="stat-counters">
+          <div class="counter-box"><span>৮২০</span><label>রেজিস্টার্ড</label></div>
+          <div class="counter-box"><span>৩১০</span><label>এক্টিভ</label></div>
+          <div class="counter-box"><span>৯৫</span><label>রেডি ডোনার</label></div>
+        </div>
+        <div class="search-box">
+          <input type="text" placeholder="পশ্চিমবঙ্গ থেকে ডোনার বা পোস্ট খুঁজুন...">
+        </div>
+      </div>
+
     </div>
 
-    <!-- ২. ডায়নামিক কালার হেডার -->
-    <header class="dynamic-header text-white shadow-md transition-colors duration-1000">
-        <div class="max-w-6xl mx-auto px-4 py-3">
-            <marquee behavior="scroll" direction="left" class="text-sm font-bold tracking-wide">
-                🩸 মেক ফ্রেন্ডস উইথ ব্লাড ডোনেশন নেটওয়ার্ক — বাংলাদেশ ও পশ্চিমবঙ্গ অঞ্চলের রক্তদান প্ল্যাটফর্ম 🩸
-            </marquee>
-        </div>
-    </header>
-
-    <!-- ৩. মূল কনটেন্ট -->
-    <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow">
-
-        <!-- ডোনেশন টাইপ -->
-        <div class="bg-white p-3 rounded-2xl shadow-sm mb-6 flex justify-center gap-6 border">
-            <label class="flex items-center gap-2 cursor-pointer font-bold text-sm text-red-600">
-                <input type="radio" name="donation_type" value="blood" checked class="accent-red-600"> 🩸 রক্ত ( Blood)
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer font-bold text-sm text-amber-600">
-                <input type="radio" name="donation_type" value="platelet" class="accent-amber-600"> ⚡ প্লেটলেট (Platelet)
-            </label>
-        </div>
-
-        <!-- ৪. সার্চ ফিল্টার সেকশন -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <!-- বাংলাদেশ -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-red-600">
-                <h3 class="font-bold text-gray-800 text-base mb-3 flex items-center gap-2">🇧🇩 বাংলাদেশ অঞ্চল </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <select id="bd-division" onchange="loadDistricts('bd')" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
-                        <option value="">বিভাগ নির্বাচন</option>
-                    </select>
-                    <select id="bd-district" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
-                        <option value="">জেলা নির্বাচন</option>
-                    </select>
-                    <select id="bd-blood" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
-                        <option value="">রক্তের গ্রুপ</option>
-                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
-                    </select>
-                </div>
-                <button onclick="searchDonors('bd')" class="w-full bg-red-600 text-white font-bold text-xs py-2.5 rounded-xl mt-3 hover:bg-red-700 transition">রক্তদাতা খুঁজুন</button>
-            </div>
-
-            <!-- পশ্চিমবঙ্গ -->
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-green-600">
-                <h3 class="font-bold text-gray-800 text-base mb-3 flex items-center gap-2">🇮🇳 পশ্চিমবঙ্গ অঞ্চল </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <select id="wb-division" onchange="loadDistricts('wb')" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
-                        <option value="">ডিভিশন নির্বাচন</option>
-                    </select>
-                    <select id="wb-district" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
-                        <option value="">জেলা নির্বাচন</option>
-                    </select>
-                    <select id="wb-blood" class="p-2 border rounded-xl text-xs bg-gray-50 outline-none">
-                        <option value="">রক্তের গ্রুপ</option>
-                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
-                    </select>
-                </div>
-                <button onclick="searchDonors('wb')" class="w-full bg-green-600 text-white font-bold text-xs py-2.5 rounded-xl mt-3 hover:bg-green-700 transition">রক্তদাতা খুঁজুন</button>
-            </div>
-        </div>
-
-        <!-- মতামত প্রকাশ সেকশন -->
-        <section class="bg-white p-5 rounded-2xl shadow-sm mb-8 border">
-            <h3 class="font-bold text-gray-800 text-base mb-3"><i class="fa-solid fa-comments text-green-600"></i> আপনার মতামত প্রকাশ করুন</h3>
-            <form onsubmit="postFeedback(event)">
-                <textarea id="feedback-text" placeholder="আপনার অনুভূতি বা বার্তা লিখুন..." required class="w-full p-3 border rounded-xl text-xs bg-gray-50 outline-none focus:ring-2 focus:ring-green-500 mb-2" rows="2"></textarea>
-                <button type="submit" class="bg-green-600 text-white font-bold text-xs px-5 py-2 rounded-xl hover:bg-green-700">পোস্ট করুন</button>
-            </form>
-            <div id="feedback-list" class="mt-4 space-y-2 border-t pt-3"></div>
-        </section>
-
-    </main>
-
-    <!-- ৫. ফিক্সড বটম নেভিগেশন বার -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
-        <div class="max-w-md mx-auto flex justify-between items-center px-4 py-2">
-            <button onclick="location.reload()" class="flex flex-col items-center text-red-600">
-                <i class="fa-solid fa-house text-lg"></i>
-                <span class="text-[10px] font-bold">হোম</span>
-            </button>
-            <button onclick="toggleModal('reg-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
-                <i class="fa-solid fa-user-plus text-lg"></i>
-                <span class="text-[10px] font-bold">রেজিস্ট্রেশন</span>
-            </button>
-            <button onclick="toggleModal('login-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
-                <i class="fa-solid fa-right-to-bracket text-lg"></i>
-                <span class="text-[10px] font-bold">লগইন</span>
-            </button>
-            <button onclick="toggleModal('report-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
-                <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                <span class="text-[10px] font-bold">অভিযোগ</span>
-            </button>
-            <button onclick="toggleModal('contact-modal')" class="flex flex-col items-center text-gray-500 hover:text-red-600">
-                <i class="fa-solid fa-headset text-lg"></i>
-                <span class="text-[10px] font-bold">যোগাযোগ</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- ৬. আপডেট করা সুসজ্জিত যোগাযোগ মডাল -->
-    <div id="contact-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 my-6 shadow-2xl relative max-h-[85vh] overflow-y-auto">
-            <button onclick="toggleModal('contact-modal')" class="absolute top-3 right-3 text-gray-400 hover:text-red-600"><i class="fa-solid fa-xmark text-xl"></i></button>
-            
-            <div class="text-center border-b pb-3 mb-4">
-                <h2 class="font-bold text-red-600 text-lg tracking-wide">MAKE FRIENDS WITH BLOOD</h2>
-                <p class="text-xs font-semibold text-gray-600">রক্ত দিন, জীবন বাঁচান</p>
-                <p class="text-[11px] text-gray-500 mt-1">আগামী ১ বছরের জন্য গঠিত কমিটি</p>
-            </div>
-
-            <!-- যোগাযোগের প্রাথমিক তথ্য -->
-            <div class="bg-red-50 p-3 rounded-xl border border-red-100 text-xs space-y-2 mb-4">
-                <p class="flex items-center gap-2"><i class="fa-solid fa-envelope text-red-600"></i> <b>ইমেইল:</b> makefriendswithblooddonation18@gmail.com</p>
-                <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-red-600"></i> <b>হেল্পলাইন:</b> 09638927067</p>
-                <p class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-red-600"></i> <b>মাদক দমন হটলাইন:</b> 01784304151</p>
-            </div>
-
-            <!-- সম্মানিত উপদেষ্টা -->
-            <div class="mb-4">
-                <h4 class="font-bold text-xs bg-gray-100 p-2 rounded-lg text-gray-700 mb-2 border-l-4 border-red-600">সম্মানিত উপদেষ্টা</h4>
-                <ul class="text-xs space-y-1.5 pl-2">
-                    <li>• <b>মোঃ লিটন ইসলাম</b> — 01764981254 <span class="text-red-600 font-bold">(A+)</span></li>
-                    <li>• <b>জি.এম. আলামীন খন্দকার</b> — 01614255656 <span class="text-red-600 font-bold">(O+)</span></li>
-                    <li>• <b>মোঃ আরিফ বিল্লাহ</b> — 01781107989 <span class="text-red-600 font-bold">(A+)</span></li>
-                    <li>• <b>মোঃ শাহিন ইসলাম</b> — 01705882960 <span class="text-red-600 font-bold">(A+)</span></li>
-                    <li>• <b>জামিল হাসান</b> — 01326-071352 <span class="text-red-600 font-bold">(B-)</span></li>
-                    <li>• <b>ওয়াসিস আলম</b> — 01770-952980 <span class="text-red-600 font-bold">(O+)</span></li>
-                </ul>
-            </div>
-
-            <!-- কার্যনির্বাহী কমিটি -->
-            <div class="mb-4">
-                <h4 class="font-bold text-xs bg-gray-100 p-2 rounded-lg text-gray-700 mb-2 border-l-4 border-green-600">কার্যনির্বাহী কমিটি</h4>
-                <div class="text-xs space-y-1.5 pl-2 grid grid-cols-1 sm:grid-cols-2 gap-x-2">
-                    <p><b>সভাপতি:</b> মোঃ জসিম আলী — 01784304151 <span class="text-red-600 font-bold">(B+)</span></p>
-                    <p><b>সহ-সভাপতি:</b> মোঃ শাহিন ইসলাম — 01320918233 <span class="text-red-600 font-bold">(O+)</span></p>
-                    <p><b>সহ-সভাপতি:</b> মোঃ সাগর ইসলাম — 01818193329 <span class="text-red-600 font-bold">(O+)</span></p>
-                    <p><b>সাধারণ সম্পাদক:</b> মোঃ ইমন ইসলাম — 01766-065644 <span class="text-red-600 font-bold">(B+)</span></p>
-                    <p><b>যুগ্ম সা. সম্পাদক:</b> মোঃ রুবেল ইসলাম — 01792408962 <span class="text-red-600 font-bold">(A+)</span></p>
-                    <p><b>সাংগঠনিক সম্পাদক:</b> মোঃ আলিমুল ইসলাম — 01819880393 <span class="text-red-600 font-bold">(A-)</span></p>
-                    <p><b>অর্থ সম্পাদক:</b> মোঃ মামুন ইসলাম — 01762038577 <span class="text-red-600 font-bold">(O+)</span></p>
-                    <p><b>প্রচার সম্পাদক:</b> মোঃ শফিকুল ইসলাম — 01301331421 <span class="text-red-600 font-bold">(A+)</span></p>
-                    <p><b>দপ্তর সম্পাদক:</b> মোঃ মোশারফ ইসলাম — 01717074884 <span class="text-red-600 font-bold">(O+)</span></p>
-                    <p><b>রক্ত সংগ্রহ সম্পাদক:</b> মোছাঃ সুমনা আক্তার — <span class="text-red-600 font-bold">(AB+)</span></p>
-                    <p><b>প্রশিক্ষণ সম্পাদক:</b> মোঃ লিমন ইসলাম — 01786930262 <span class="text-red-600 font-bold">(O+)</span></p>
-                    <p><b>ধর্ম সম্পাদক:</b> মোঃ রাফি ইসলাম — 01315235664 <span class="text-red-600 font-bold">(AB+)</span></p>
-                    <p><b>স্বাস্থ্য সম্পাদক:</b> মোঃ রাব্বি হাসান — 01773346727 <span class="text-red-600 font-bold">(AB+)</span></p>
-                    <p><b>নারী ও শিশু সম্পাদক:</b> মোছাঃ সেলিনা আক্তার — <span class="text-red-600 font-bold">(O+)</span></p>
-                    <p><b>সদস্য-সচিব:</b> মোঃ মাসুদ ইসলাম — 01732409973 <span class="text-red-600 font-bold">(AB+)</span></p>
-                </div>
-            </div>
-
-            <!-- কার্যনির্বাহী সদস্য -->
-            <div class="mb-4">
-                <h4 class="font-bold text-xs bg-gray-100 p-2 rounded-lg text-gray-700 mb-2 border-l-4 border-amber-500">কার্যনির্বাহী সদস্য</h4>
-                <ul class="text-xs space-y-1.5 pl-2">
-                    <li>• <b>মোঃ আনজিরুল ইসলাম</b> — 01346400540 <span class="text-red-600 font-bold">(A+)</span></li>
-                    <li>• <b>মোঃ রাফি ইসলাম</b> — 01316439132 <span class="text-red-600 font-bold">(B+)</span></li>
-                    <li>• <b>মোজাম্মেল ইসলাম</b> — 01789965174 <span class="text-red-600 font-bold">(O+)</span></li>
-                    <li>• <b>হাসিফুল ইসলাম</b> — 01790869044 <span class="text-red-600 font-bold">(O+)</span></li>
-                </ul>
-            </div>
-
-            <div class="bg-gray-50 p-3 rounded-xl text-center border">
-                <p class="text-xs font-bold text-red-600">"এক ফোটা রক্ত হতে পারে কারো জীবনের আলো"</p>
-                <p class="text-[11px] text-gray-600 italic mt-0.5">এসো, রক্তের বন্ধনে গড়ি মানবতার সমাজ</p>
-            </div>
-        </div>
+    <!-- ৪. মতামত ও সামাজিক পোস্ট -->
+    <div class="social-feed">
+      <h3>💬 মতামত ও পোস্ট করুন</h3>
+      <div class="post-input-box" style="margin-top: 10px;">
+        <textarea placeholder="আপনার মতামত বা রক্তের অনুরোধ লিখুন..."></textarea>
+      </div>
+      <div class="post-actions">
+        <input type="file" id="postImage" style="display: none;">
+        <button class="btn" style="background: #555;" onclick="document.getElementById('postImage').click()">📷 ছবি যুক্ত করুন</button>
+        <button class="btn">পোস্ট করুন</button>
+      </div>
     </div>
 
-    <!-- রেজিস্ট্রেশন মডাল -->
-    <div id="reg-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 my-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onclick="toggleModal('reg-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
-            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-id-card text-red-600"></i> ডোনার রেজিস্ট্রেশন
-            </h3>
-            
-            <form onsubmit="handleRegistration(event)" class="space-y-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[11px] font-bold text-gray-600 block mb-1">পূর্ণ নাম:</label>
-                        <input type="text" placeholder="সরিফুল ইসলাম" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-bold text-gray-600 block mb-1">ডাকনাম:</label>
-                        <input type="text" placeholder="সরিফ" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[11px] font-bold text-gray-600 block mb-1">বয়স (বছর):</label>
-                        <input type="number" min="18" max="65" placeholder="২৫" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-bold text-gray-600 block mb-1">রক্তের গ্রুপ:</label>
-                        <select required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                            <option value="">নির্বাচন করুন</option>
-                            <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-gray-600 block mb-1">সর্বশেষ রক্তদানের তারিখ:</label>
-                    <input type="date" class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-gray-600 block mb-1">মোবাইল নম্বর:</label>
-                    <input type="tel" placeholder="০১৭XXXXXXXX" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-gray-600 block mb-1">গোপন পাসওয়ার্ড:</label>
-                    <input type="password" placeholder="কমপক্ষে ৬ ডিজিট" minlength="6" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-gray-600 block mb-1">Gmail (OTP এর জন্য):</label>
-                    <input type="email" placeholder="example@gmail.com" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-gray-600 block mb-1">বর্তমান ঠিকানা:</label>
-                    <input type="text" placeholder="বাসা, রোড, এলাকা" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50 outline-none">
-                </div>
-                <button type="submit" class="w-full bg-red-600 text-white font-bold text-xs py-2.5 rounded-xl mt-4 shadow">রেজিস্ট্রেশন করুন</button>
-            </form>
+    <!-- ৫. জরুরি রক্তের প্রয়োজন -->
+    <div class="blood-section">
+      <h3>🚨 জরুরি রক্তের প্রয়োজন (লাইভ আপডেট)</h3>
+      
+      <div class="blood-card">
+        <div>
+          <h4>হাসপাতাল: ঢাকা মেডিকেল কলেজ, ঢাকা</h4>
+          <p>রোগী: রক্তস্বল্পতা | যোগাযোগ: 017********</p>
         </div>
+        <div class="blood-badge">A+</div>
+      </div>
+
+      <div class="blood-card">
+        <div>
+          <h4>হাসপাতাল: এসএসকেএম হাসপাতাল, কলকাতা</h4>
+          <p>রোগী: ইমার্জেন্সি অপারেশন | যোগাযোগ: 098********</p>
+        </div>
+        <div class="blood-badge">O-</div>
+      </div>
+
     </div>
 
-    <!-- লগইন মডাল -->
-    <div id="login-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
-            <button onclick="toggleModal('login-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
-            <h3 class="font-bold text-gray-800 text-base mb-4">ডোনার লগইন</h3>
-            <form onsubmit="handleLogin(event)" class="space-y-3">
-                <input type="tel" placeholder="মোবাইল নম্বর" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50">
-                <input type="password" placeholder="পাসওয়ার্ড" required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50">
-                <button type="submit" class="w-full bg-green-600 text-white font-bold text-xs py-2.5 rounded-xl">লগইন</button>
-            </form>
-        </div>
-    </div>
+  </div>
 
-    <!-- অভিযোগ মডাল -->
-    <div id="report-modal" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-            <button onclick="toggleModal('report-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-xmark text-lg"></i></button>
-            <h3 class="font-bold text-gray-800 text-base mb-3">অভিযোগ জানান</h3>
-            <form onsubmit="alert('অভিযোগ জমা হয়েছে!'); toggleModal('report-modal'); event.preventDefault();" class="space-y-3">
-                <textarea placeholder="অভিযোগের বিবরণ..." required class="w-full p-2.5 border rounded-xl text-xs bg-gray-50" rows="3"></textarea>
-                <button type="submit" class="w-full bg-red-600 text-white font-bold text-xs py-2.5 rounded-xl">জমা দিন</button>
-            </form>
-        </div>
-    </div>
+  <script>
+    // টিকবক্স চেক করলে বাটন অ্যাক্টিভ হবে
+    document.getElementById('agreeCheck').addEventListener('change', function() {
+      document.getElementById('enterBtn').disabled = !this.checked;
+    });
 
- <script>
-        // বাংলাদেশ ও পশ্চিমবঙ্গ প্রশাসনিক তথ্য
-        const locationData = {
-            bd: {
-                "ঢাকা": ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", "টাঙ্গাইল", "মানিকগঞ্জ", "মুন্সিগঞ্জ", "নরসিংদী", "ফরিদপুর", "মাদারীপুর", "গোপালগঞ্জ", "রাজবাড়ী", "শরীয়তপুর"],
-                "চট্টগ্রাম": ["চট্টগ্রাম", "কক্সবাজার", "কুমিল্লা", "ফেনী", "ব্রাহ্মণবাড়িয়া", "নোয়াখালী", "লক্ষ্মীপুর", "চাঁদপুর", "রাঙ্গামাটি", "বান্দরবান", "খাগড়াছড়ি"],
-                "রাজশাহী": ["রাজশাহী", "বগুড়া", "পাবনা", "সিরাজগঞ্জ", "নওগাঁ", "নাটোর", "জয়পুরহাট", "চাঁপাইনবাবগঞ্জ"],
-                "রংপুর": ["রংপুর", "দিনাজপুর", "গাইবান্ধা", "কুড়িগ্রাম", "লালমনিরহাট", "নীলফামারী", "পঞ্চগড়", "ঠাকুরগাঁও"],
-                "খুলনা": ["খুলনা", "যশোর", "সাতক্ষীরা", "ঝিনাইদহ", "কুষ্টিয়া", "বাগেরহাট", "চুয়াডাঙ্গা", "মেহেরপুর", "মাগুরা", "নড়াইল"],
-                "বরিশাল": ["বরিশাল", "পটুয়াখালী", "ভোলা", "পিরোজপুর", "বরগুনা", "ঝালকাঠি"],
-                "সিলেট": ["সিলেট", "মৌলভীবাজার", "হবিগঞ্জ", "সুনামগঞ্জ"],
-                "ময়মনসিংহ": ["ময়মনসিংহ", "জামালপুর", "নেত্রকোনা", "শেরপুর"]
-            },
-            wb: {
-                "প্রেসিডেন্সি": ["কলকাতা", "উত্তর ২৪ পরগনা", "দক্ষিণ ২৪ পরগনা", "হাওড়া", "হুগলী", "নদীয়ায়"],
-                "মেদিনীপুর": ["পূর্ব মেদিনীপুর", "পশ্চিম মেদিনীপুর", "ঝাড়গ্রাম", "পুরুলিয়া", "বাঁকুড়া"],
-                "বর্ধমান": ["পূর্ব বর্ধমান", "পশ্চিম বর্ধমান", "বীরভূম", "মুর্শিদাবাদ"],
-                "মালদা": ["মালদা", "উত্তর দিনাজপুর", "দক্ষিণ দিনাজপুর", "মুর্শিদাবাদ"],
-                "জলপাইগুড়ি": ["জলপাইগুড়ি", "দার্জিলিং", "কালিম্পং", "কোচবিহার", "আলিপুরদুয়ার"]
-            }
-        };
+    // মোডাল বন্ধ করার লজিক
+    function closeModal() {
+      document.getElementById('warningModal').style.display = 'none';
+    }
+  </script>
 
-        // বিভাগ ও জেলা লোড ফাংশন
-        function initLocations() {
-            const bdDiv = document.getElementById('bd-division');
-            const wbDiv = document.getElementById('wb-division');
-            
-            Object.keys(locationData.bd).forEach(div => bdDiv.innerHTML += `<option value="${div}">${div}</option>`);
-            Object.keys(locationData.wb).forEach(div => wbDiv.innerHTML += `<option value="${div}">${div}</option>`);
-        }
-
-        function loadDistricts(region) {
-            const divVal = document.getElementById(`${region}-division`).value;
-            const distSelect = document.getElementById(`${region}-district`);
-            distSelect.innerHTML = '<option value="">জেলা নির্বাচন</option>';
-            
-            if (divVal && locationData[region][divVal]) {
-                locationData[region][divVal].forEach(dist => {
-                    distSelect.innerHTML += `<option value="${dist}">${dist}</option>`;
-                });
-            }
-        }
-
-        window.onload = initLocations;
-
-        function toggleModal(id) {
-            document.getElementById(id).classList.toggle('hidden');
-        }
-
-        function postFeedback(e) {
-            e.preventDefault();
-            const text = document.getElementById('feedback-text').value;
-            const list = document.getElementById('feedback-list');
-            const newFeedback = document.createElement('div');
-            newFeedback.className = "bg-gray-50 p-2.5 rounded-xl text-xs border border-gray-200";
-            newFeedback.innerHTML = `<p class="font-semibold text-gray-700">শুভাকাঙ্ক্ষী:</p><p class="text-gray-600">${text}</p>`;
-            list.prepend(newFeedback);
-            document.getElementById('feedback-text').value = '';
-        }
-
-        function handleRegistration(e) {
-            e.preventDefault();
-            alert("রেজিস্ট্রেশন জমা হয়েছে!");
-            toggleModal('reg-modal');
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            alert("সফলভাবে লগইন হয়েছে!");
-            toggleModal('login-modal');
-        }
-
-        function searchDonors(region) {
-            const div = document.getElementById(`${region}-division`).value;
-            const dist = document.getElementById(`${region}-district`).value;
-            const blood = document.getElementById(`${region}-blood`).value;
-            alert(`অনুসন্ধান করা হচ্ছে: ${div || 'সব'}, ${dist || 'সব'}, গ্রুপ: ${blood || 'সব'}`);
-        }
-    </script>
 </body>
-</html>
+    </html>
+    
