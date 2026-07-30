@@ -6,41 +6,21 @@
   <title>Make Friends With Blood Donation</title>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Hind Siliguri', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Hind Siliguri', sans-serif; }
+    body { background-color: #f4f6f9; color: #333; }
 
-    body {
-      background-color: #f4f6f9;
-      color: #333;
-    }
-
-    /* ১. হেডার ও বিসমিল্লাহ সেকশন */
+    /* ১. হেডার ও বিসমিল্লাহ */
     .top-header {
       background: linear-gradient(135deg, #8b0000, #b22222);
       color: #fff;
       text-align: center;
       padding: 15px 10px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .bismillah {
-      font-size: 26px;
-      font-weight: bold;
-      color: #ffd700;
-      margin-bottom: 5px;
-    }
-
-    .org-name-container {
-      white-space: nowrap;
       overflow: hidden;
     }
 
+    .bismillah { font-size: 26px; font-weight: bold; color: #ffd700; margin-bottom: 5px; }
+
+    .org-name-container { white-space: nowrap; overflow: hidden; }
     .org-name {
       display: inline-block;
       font-size: 18px;
@@ -54,9 +34,32 @@
       100% { transform: translateX(100%); }
     }
 
-    /* ২. লাইভ নোটিশ বার */
+    /* ২. নেভিগেশন বার (NAVBAR) */
+    .navbar {
+      background-color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .navbar a {
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .navbar a:hover, .navbar a.active {
+      background-color: #b22222;
+    }
+
+    /* ৩. লাইভ নোটিশ বার */
     .notice-ticker {
-      background-color: #222;
+      background-color: #333;
       color: #fff;
       display: flex;
       align-items: center;
@@ -68,29 +71,17 @@
       padding: 3px 10px;
       border-radius: 4px;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 13px;
       margin-right: 15px;
       white-space: nowrap;
     }
 
-    .notice-text {
-      white-space: nowrap;
-      overflow: hidden;
-      width: 100%;
-    }
-
-    .notice-text marquee {
-      font-size: 15px;
-    }
+    .notice-text marquee { font-size: 14px; }
 
     /* কন্টেইনার */
-    .container {
-      max-width: 1100px;
-      margin: 20px auto;
-      padding: 0 15px;
-    }
+    .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
 
-    /* ৩. বাংলাদেশ ও পশ্চিমবঙ্গ কাউন্টার ও সার্চ */
+    /* ৪. বাংলাদেশ ও পশ্চিমবঙ্গ সেকশন */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -106,57 +97,32 @@
       border-top: 4px solid #b22222;
     }
 
-    .stat-card.wb {
-      border-top-color: #1e88e5;
-    }
-
-    .stat-card h3 {
-      font-size: 20px;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .stat-card.wb { border-top-color: #1e88e5; }
 
     .stat-counters {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 15px;
+      margin: 15px 0;
       background: #f8f9fa;
       padding: 10px;
       border-radius: 8px;
     }
 
-    .counter-box {
-      text-align: center;
-    }
-
-    .counter-box span {
-      display: block;
-      font-size: 18px;
-      font-weight: bold;
-      color: #b22222;
-    }
-
-    .stat-card.wb .counter-box span {
-      color: #1e88e5;
-    }
-
-    .counter-box label {
-      font-size: 12px;
-      color: #666;
-    }
+    .counter-box { text-align: center; }
+    .counter-box span { display: block; font-size: 18px; font-weight: bold; color: #b22222; }
+    .stat-card.wb .counter-box span { color: #1e88e5; }
+    .counter-box label { font-size: 12px; color: #666; }
 
     .search-box input {
       width: 100%;
-      padding: 10px 12px;
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 6px;
       outline: none;
     }
 
-    /* ৪. সোশ্যাল ফিড ও মতামত */
-    .social-feed {
+    /* ৫. সোশ্যাল ফিড ও মতামত */
+    .social-feed, .blood-section {
       background: #fff;
       padding: 20px;
       border-radius: 12px;
@@ -172,14 +138,10 @@
       border-radius: 8px;
       resize: none;
       outline: none;
-      margin-bottom: 10px;
+      margin: 10px 0;
     }
 
-    .post-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .post-actions { display: flex; justify-content: space-between; }
 
     .btn {
       background-color: #b22222;
@@ -191,37 +153,12 @@
       font-weight: bold;
     }
 
-    /* ৫. জরুরি রক্তের প্রয়োজন সেকশন */
-    .blood-section {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    .blood-card {
-      background: #fff0f0;
-      border-left: 5px solid #b22222;
-      padding: 15px;
-      border-radius: 8px;
+    /* ডায়নামিক কন্টেন্ট ডিসপ্লে এলাকা (খালি) */
+    .posts-list, .blood-posts-list {
       margin-top: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
     }
 
-    .blood-badge {
-      background: #b22222;
-      color: #fff;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    /* ৬. সতর্কতামূলক পপ-আপ মোডাল */
+    /* ৬. সতর্কতামূলক পপ-আপ */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -240,11 +177,10 @@
       max-width: 450px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
 
     .modal-card h2 { color: #b22222; margin-bottom: 10px; }
-    .modal-card p { font-size: 14px; color: #555; margin-bottom: 15px; line-height: 1.5; }
+    .modal-card p { font-size: 14px; color: #555; margin-bottom: 15px; }
     .checkbox-container { font-size: 14px; margin-bottom: 20px; display: block; }
     .btn:disabled { background-color: #ccc; cursor: not-allowed; }
   </style>
@@ -255,7 +191,7 @@
   <div id="warningModal" class="modal-overlay">
     <div class="modal-card">
       <h2>⚠️ সতর্কতামূলক নোটিশ</h2>
-      <p>আমাদের প্ল্যাটফর্মে স্বাগতম! যেকোনো তথ্য প্রদান, রক্ত চাওয়া বা মতামত প্রকাশের ক্ষেত্রে সত্যতা বজায় রাখুন। কোনোপ্রকার ভুয়া বা বিভ্রান্তিকর পোস্ট করা নিষিদ্ধ।</p>
+      <p>আমাদের প্ল্যাটফর্মে স্বাগতম! যেকোনো তথ্য প্রদান, রক্ত চাওয়া বা মতামত প্রকাশের ক্ষেত্রে সঠিক তথ্য প্রদান করুন। ভুয়া বা বিভ্রান্তিকর তথ্য প্রদান করা সম্পূর্ণ নিষেধ।</p>
       <label class="checkbox-container">
         <input type="checkbox" id="agreeCheck"> আমি সকল নিয়মাবলী মেনে চলতে সম্মত।
       </label>
@@ -263,7 +199,7 @@
     </div>
   </div>
 
-  <!-- ১. হেডার সেকশন -->
+  <!-- ১. হেডার -->
   <header class="top-header">
     <div class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
     <div class="org-name-container">
@@ -271,98 +207,95 @@
     </div>
   </header>
 
-  <!-- ২. নোটিশ বোর্ড -->
+  <!-- ২. নেভিগেশন বার (NAVBAR) -->
+  <nav class="navbar">
+    <a href="index.html" class="active">হোম</a>
+    <a href="auth.html">রেজিস্ট্রেশন / লগইন</a>
+    <a href="#feed">মতামত ও পোস্ট</a>
+    <a href="#blood">জরুরি রক্ত</a>
+    <a href="dashboard.html">ড্যাশবোর্ড</a>
+  </nav>
+
+  <!-- ৩. লাইভ নোটিশ বার -->
   <div class="notice-ticker">
     <div class="notice-badge">জরুরি নোটিশ</div>
     <div class="notice-text">
-      <marquee onmouseover="this.stop();" onmouseout="this.start();">
-        রক্তদানের মাধ্যমে জীবন বাঁচান। যেকোনো জরুরি প্রয়োজনে আমাদের হটলাইনে যোগাযোগ করুন। সত্য তথ্য দিয়ে রেজিস্ট্রেশন সম্পন্ন করুন।
+      <marquee id="liveNotice" onmouseover="this.stop();" onmouseout="this.start();">
+        নোটিশ আপডেট হচ্ছে...
       </marquee>
     </div>
   </div>
 
   <div class="container">
 
-    <!-- ৩. বাংলাদেশ ও পশ্চিমবঙ্গ কাউন্টার এবং সার্চ -->
+    <!-- ৪. বাংলাদেশ ও পশ্চিমবঙ্গ কাউন্টার এবং আলাদা সার্চ -->
     <div class="stats-grid">
       
       <!-- বাংলাদেশ -->
       <div class="stat-card">
-        <h3>🇧🇩 বাংলাদেশ সেকশন</h3>
+        <h3>🇧🇩 বাংলাদেশ</h3>
         <div class="stat-counters">
-          <div class="counter-box"><span>১২৫০</span><label>রেজিস্টার্ড</label></div>
-          <div class="counter-box"><span>৪৫০</span><label>এক্টিভ</label></div>
-          <div class="counter-box"><span>১৮০</span><label>রেডি ডোনার</label></div>
+          <div class="counter-box"><span id="bdReg">0</span><label>রেজিস্টার্ড</label></div>
+          <div class="counter-box"><span id="bdActive">0</span><label>এক্টিভ</label></div>
+          <div class="counter-box"><span id="bdReady">0</span><label>রেডি ডোনার</label></div>
         </div>
         <div class="search-box">
-          <input type="text" placeholder="বাংলাদেশ থেকে ডোনার বা পোস্ট খুঁজুন...">
+          <input type="text" placeholder="বাংলাদেশ থেকে সার্চ করুন...">
         </div>
       </div>
 
       <!-- পশ্চিমবঙ্গ -->
       <div class="stat-card wb">
-        <h3>🇮🇳 পশ্চিমবঙ্গ সেকশন</h3>
+        <h3>🇮🇳 পশ্চিমবঙ্গ</h3>
         <div class="stat-counters">
-          <div class="counter-box"><span>৮২০</span><label>রেজিস্টার্ড</label></div>
-          <div class="counter-box"><span>৩১০</span><label>এক্টিভ</label></div>
-          <div class="counter-box"><span>৯৫</span><label>রেডি ডোনার</label></div>
+          <div class="counter-box"><span id="wbReg">0</span><label>রেজিস্টার্ড</label></div>
+          <div class="counter-box"><span id="wbActive">0</span><label>এক্টিভ</label></div>
+          <div class="counter-box"><span id="wbReady">0</span><label>রেডি ডোনার</label></div>
         </div>
         <div class="search-box">
-          <input type="text" placeholder="পশ্চিমবঙ্গ থেকে ডোনার বা পোস্ট খুঁজুন...">
+          <input type="text" placeholder="পশ্চিমবঙ্গ থেকে সার্চ করুন...">
         </div>
       </div>
 
     </div>
 
-    <!-- ৪. মতামত ও সামাজিক পোস্ট -->
-    <div class="social-feed">
+    <!-- ৫. সোশ্যাল ফিড ও মতামত -->
+    <div class="social-feed" id="feed">
       <h3>💬 মতামত ও পোস্ট করুন</h3>
-      <div class="post-input-box" style="margin-top: 10px;">
-        <textarea placeholder="আপনার মতামত বা রক্তের অনুরোধ লিখুন..."></textarea>
+      <div class="post-input-box">
+        <textarea placeholder="আপনার মতামত বা পোস্ট লিখুন..."></textarea>
       </div>
       <div class="post-actions">
         <input type="file" id="postImage" style="display: none;">
-        <button class="btn" style="background: #555;" onclick="document.getElementById('postImage').click()">📷 ছবি যুক্ত করুন</button>
+        <button class="btn" style="background: #555;" onclick="document.getElementById('postImage').click()">📷 ছবি</button>
         <button class="btn">পোস্ট করুন</button>
       </div>
+
+      <!-- পোস্টগুলো ডাটাবেজ থেকে এখানে আসবে (এখন খালি) -->
+      <div class="posts-list" id="userPosts"></div>
     </div>
 
-    <!-- ৫. জরুরি রক্তের প্রয়োজন -->
-    <div class="blood-section">
-      <h3>🚨 জরুরি রক্তের প্রয়োজন (লাইভ আপডেট)</h3>
+    <!-- ৬. জরুরি রক্তের প্রয়োজন -->
+    <div class="blood-section" id="blood">
+      <h3>🚨 জরুরি রক্তের প্রয়োজন</h3>
       
-      <div class="blood-card">
-        <div>
-          <h4>হাসপাতাল: ঢাকা মেডিকেল কলেজ, ঢাকা</h4>
-          <p>রোগী: রক্তস্বল্পতা | যোগাযোগ: 017********</p>
-        </div>
-        <div class="blood-badge">A+</div>
-      </div>
-
-      <div class="blood-card">
-        <div>
-          <h4>হাসপাতাল: এসএসকেএম হাসপাতাল, কলকাতা</h4>
-          <p>রোগী: ইমার্জেন্সি অপারেশন | যোগাযোগ: 098********</p>
-        </div>
-        <div class="blood-badge">O-</div>
-      </div>
-
+      <!-- রক্তের রিকোয়েস্টগুলো ডাটাবেজ থেকে এখানে আসবে (এখন খালি) -->
+      <div class="blood-posts-list" id="bloodRequests"></div>
     </div>
 
   </div>
 
   <script>
-    // টিকবক্স চেক করলে বাটন অ্যাক্টিভ হবে
+    // সতর্কতা পপ-আপ লজিক
     document.getElementById('agreeCheck').addEventListener('change', function() {
       document.getElementById('enterBtn').disabled = !this.checked;
     });
 
-    // মোডাল বন্ধ করার লজিক
     function closeModal() {
       document.getElementById('warningModal').style.display = 'none';
     }
   </script>
 
 </body>
-    </html>
-    
+      </html>
+  
